@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.css</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.js</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.jpg</url-pattern>
+        <url-pattern>*.jpeg</url-pattern>
+        <url-pattern>*.png</url-pattern>
+        <url-pattern>*.webp</url-pattern>
+        <url-pattern>*.avif</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>EditServlet</servlet-name>
+        <servlet-class>ar.fabriziodev.finalcacfabrizioferroni.servlets.usuarios.EditServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>EditServlet</servlet-name>
+        <url-pattern>/admin/usuario/editar/*</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>DeletServlet</servlet-name>
+        <servlet-class>ar.fabriziodev.finalcacfabrizioferroni.servlets.usuarios.DeletServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DeletServlet</servlet-name>
+        <url-pattern>/admin/usuario/eliminar/*</url-pattern>
+    </servlet-mapping>
+
+    <!-- Oradores -->
+
+    <servlet>
+        <servlet-name>EditOradorServlet</servlet-name>
+        <servlet-class>ar.fabriziodev.finalcacfabrizioferroni.servlets.oradores.EditOradorServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>EditOradorServlet</servlet-name>
+        <url-pattern>/admin/orador/editar/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>DeletOradorServlet</servlet-name>
+        <servlet-class>ar.fabriziodev.finalcacfabrizioferroni.servlets.oradores.DeletOradorServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DeletOradorServlet</servlet-name>
+        <url-pattern>/admin/orador/eliminar/*</url-pattern>
+    </servlet-mapping>
+
+    <!-- Tickets -->
+    <servlet>
+        <servlet-name>EditTicketServlet</servlet-name>
+        <servlet-class>ar.fabriziodev.finalcacfabrizioferroni.servlets.tickets.EditTicketServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>EditTicketServlet</servlet-name>
+        <url-pattern>/admin/ticket/editar/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>DeletTicketServlet</servlet-name>
+        <servlet-class>ar.fabriziodev.finalcacfabrizioferroni.servlets.tickets.DeletTicketServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DeletTicketServlet</servlet-name>
+        <url-pattern>/admin/ticket/eliminar/*</url-pattern>
+    </servlet-mapping>
+
+    <session-config>
+        <session-timeout>
+            60
+        </session-timeout>
+    </session-config>
+</web-app>

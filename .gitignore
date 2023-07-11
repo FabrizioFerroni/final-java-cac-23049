@@ -1,0 +1,5 @@
+target/
+src/main/resources/config.properties
+nb-configuration.xml
+nbactions.xml
+.idea/

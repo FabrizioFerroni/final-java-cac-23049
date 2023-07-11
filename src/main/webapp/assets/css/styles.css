@@ -1,0 +1,443 @@
+/* Proyecto final frontend CAC 2023 Java - Comision 23049 - Fabrizio Ferroni */
+
+* {
+    box-sizing: border-box;
+}
+
+.butt{
+    height: 35px;
+    padding: 4px 8px;
+}
+
+.float-left{
+    float: left!important;
+}
+
+.float-right {
+    float: right!important;
+}
+
+
+  table.dataTable {
+    clear: left !important;
+  }
+
+.b0br2{
+    border-top-right-radius: .25rem !important;
+    border-bottom-right-radius: .25rem !important;
+    border-bottom-left-radius: .25rem !important;
+    border-top-left-radius: .25rem !important;
+}
+
+.active2{
+    color: greenyellow !important;
+}
+
+
+.ml10 {
+    margin-left: 10px !important;
+}
+
+button,
+a,
+input,
+select,
+textarea {
+    outline: none !important;
+    box-shadow: 0 0 0 0 transparent !important;
+}
+
+.invalid-feedback {
+    text-align: left;
+}
+
+::selection {
+    background-color: #FFC801;
+    color: black;
+}
+
+.dropdown-item.active,
+.dropdown-item:active {
+    background-color: #FFC801;
+    color: black;
+}
+
+
+/* CLIENT-SPECIFIC STYLES */
+
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+
+/* Track */
+
+::-webkit-scrollbar-track {
+    background: #555;
+    /* background: #f1f1f1; */
+}
+
+
+/* Handle */
+
+::-webkit-scrollbar-thumb {
+    /* background: #888; */
+    background: #af8900;
+}
+
+
+/* Handle on hover */
+
+::-webkit-scrollbar-thumb:hover {
+    background: #FFC801;
+    /* background: #555; */
+}
+
+.outnone {
+    outline: none;
+    box-shadow: 0 0 0 0 transparent;
+}
+
+
+/* Menú */
+
+.bi {
+    width: 1rem;
+    height: 1em;
+    vertical-align: -0.125em;
+    fill: currentcolor;
+}
+
+.nav__back {
+    color: white;
+    background-color: #353A40;
+}
+
+.nav__text {
+    color: #29AB44;
+}
+
+.nav__text:hover {
+    color: #279b3e;
+}
+
+
+/* Home */
+
+.home__info {
+    background-image: url(../img/ba1.jpg);
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 80vh;
+    max-width: 100%;
+    position: relative;
+    color: white;
+    z-index: 1;
+}
+
+.home__info::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: -1;
+}
+
+.home__info--text {
+    text-align: right;
+    width: 40%;
+    font-size: 1rem;
+    line-height: 2;
+    padding-right: 15rem;
+    padding-left: 3rem;
+}
+
+.home__info--button {
+    font-size: 1.25rem;
+}
+
+.home__info--btn {
+    background-color: #29A744;
+    border-color: #29A744;
+    color: white;
+}
+
+.home__info--btn:hover {
+    background-color: #23913B;
+    border-color: #23913B;
+    color: white;
+}
+
+
+/* Oradores */
+
+.oradores__info {
+    margin-bottom: 2rem;
+    max-width: 100%;
+}
+
+.oradores__info--title {
+    text-transform: uppercase;
+    font-size: 1rem;
+}
+
+.oradores__info--title span {
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.card-text {
+    word-break: break-all;
+    font-size: 0.9rem !important;
+    line-height: 1.8;
+}
+
+.pb-10 {
+    padding-bottom: 10px;
+}
+
+.operadores__info--cards {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: calc(-1 * var(--bs-gutter-y));
+    margin-right: calc(-.5 * var(--bs-gutter-x));
+    margin-left: calc(-.5 * var(--bs-gutter-x));
+    flex-direction: row;
+    margin-bottom: 0rem;
+}
+
+.operadores__info--card {
+    width: 25rem;
+}
+
+
+/* Lugar y fecha */
+
+.lugar__info--border {
+    border-left: 1px solid white;
+}
+
+.lugar__info--bg {
+    background-color: #353A40;
+}
+
+
+/* Convertite en orador */
+
+.convertite__info {
+    text-align: center;
+}
+
+.convertite__info--title {
+    text-transform: uppercase;
+    font-size: 0.8rem;
+}
+
+.convertite__info--title span {
+    font-weight: bold;
+    font-size: 2rem;
+    padding-bottom: .9rem;
+}
+
+.convertite__info a {
+    border-bottom: 1px dotted;
+    text-decoration: none;
+    color: unset;
+}
+
+.convertite__info--textarea {
+    height: 8rem !important;
+}
+
+.convertite__info--form {
+    margin-left: 15rem;
+    margin-right: 15rem;
+}
+
+.convertite__info--form-ticket {
+    margin-left: 5rem;
+    margin-right: 5rem;
+}
+
+.convertite__info-left {
+    text-align: left;
+}
+
+.form-control:focus {
+    border-color: #96C93E;
+}
+
+.convertite__info--btn {
+    background-color: #96C93E;
+    border-color: #96C93E;
+    color: white;
+}
+
+.convertite__info--btn:hover,
+.convertite__info--btn.active,
+.btn:first-child:active,
+.convertite__info--btn:active {
+    background-color: #567423 !important;
+    border-color: #567423 !important;
+    color: white !important;
+}
+
+
+/* Footer */
+
+.footer__info {
+    list-style: none;
+    margin-bottom: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.footer__info--bg {
+    background: linear-gradient(to right, #1B3743, #1E5170);
+}
+
+.footer__info--enlace {
+    display: block;
+    width: min-content;
+}
+
+.footer__info--enlace:hover {
+    color: #5de5a5 !important;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.mi-table {
+    width: 100%;
+}
+
+td .resumen__der {
+    text-align: right !important;
+}
+
+td .resumen__izq {
+    text-align: left !important;
+}
+
+.estudiante__card:focus,
+.estudiante__card:hover,
+.estudiante__card:focus span,
+.estudiante__card:hover span,
+.estudiante__card.active,
+.estudiante__card.active span {
+    background-color: #0D6EFD;
+    color: white !important;
+}
+
+.trainee__card:focus,
+.trainee__card:hover,
+.trainee__card:focus span,
+.trainee__card:hover span,
+.trainee__card.active,
+.trainee__card.active span {
+    background-color: #0DCAF0;
+    color: white !important;
+}
+
+.junior__card:focus,
+.junior__card:hover,
+.junior__card:focus span,
+.junior__card:hover span,
+.junior__card.active,
+.junior__card.active span {
+    background-color: #ffc107;
+    color: white !important;
+}
+
+.mb-erase {
+    margin-bottom: 0rem;
+}
+
+.card-login{
+    width: 35%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    border-radius: 0.6rem;
+    border: 1px solid #ced4da;
+    margin-top: 3.4475rem;
+    margin-bottom: 3.4475rem;
+}
+
+
+/* Media querys */
+
+@media screen and (max-width:768px) {
+.card-login{
+    width: 90%;
+}
+    .logo {
+        margin-left: 0rem !important;
+    }
+    .home__info {
+        height: 100vh;
+    }
+    .home__info--text {
+        text-align: right;
+        width: unset;
+        line-height: 1.8;
+        padding-right: 3rem;
+    }
+    .home__info--button {
+        font-size: 1.05rem;
+    }
+    .operadores__info--cards {
+        flex-direction: column;
+        margin-bottom: 2rem;
+    }
+    .operadores__info--card {
+        width: 20rem;
+    }
+    .operadores__info {
+        margin-bottom: 2rem;
+    }
+    .convertite__info--form {
+        margin-left: 0rem;
+        margin-right: 0rem;
+    }
+    .convertite__info--form-ticket {
+        margin-left: 1rem;
+        margin-right: 1rem;
+    }
+    .mb-erase {
+        margin-bottom: 1rem;
+    }
+    .lugar__info--border {
+        border-left: 0px;
+        border-top: 1px solid white;
+    }
+    .footer__info {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .footer__info li {
+        padding: .5rem;
+    }
+}
