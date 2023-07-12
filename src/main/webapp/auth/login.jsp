@@ -71,6 +71,9 @@
                             <a class="nav-link nav__text fs-5" href="/comprar/ticket">Comprar tickets</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link fs-5" href="/buscar">Buscar ticket</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link fs-5 active" href="/iniciarsesion">Iniciar sesion</a>
                         </li>
                     </ul>

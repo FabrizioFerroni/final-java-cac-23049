@@ -2,13 +2,7 @@
     String status = (String) session.getAttribute("status");
     String msg = (String) session.getAttribute("msg");
 
-    String nombre2 = (String) session.getAttribute("nombre2");
-    String apellido2 = (String) session.getAttribute("apellido2");
-    String email2 = (String) session.getAttribute("email2");
-    String codigo2 = (String) session.getAttribute("codigo2");
-    Integer cantidad2 = (Integer) session.getAttribute("cantidad2");
-    Double total2 = (Double) session.getAttribute("total2");
-    String categoria2 = (String) session.getAttribute("categoria2");
+    String codigo = (String) session.getAttribute("codigo");
 %>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -18,7 +12,7 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Comprar Tickets - Trabajo Integrador Bootstrap CAC 23049 - Fabrizio Ferroni</title>
+        <title>Buscar Tickets - Trabajo Integrador Bootstrap CAC 23049 - Fabrizio Ferroni</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
         <link rel="stylesheet" href="../assets/css/normalize.css">
         <link rel="stylesheet" href="../assets/css/styles.css">
@@ -32,6 +26,12 @@
         <meta name="description" content="Proyecto final de bootstrap para la comision 23049 del curso de Java en Codo a Codo.">
         <meta name="keywords" content="HTML, CSS, JavaScript, Bootstrap, Codo a Codo, Java Inicial">
         <meta name="author" content="Fabrizio Ferroni">
+        <style>
+            .card-login{
+                margin-top: 6.4475rem !important;
+                margin-bottom: 6.1rem !important;
+            }
+        </style>
     </head>
     <body>
         <!-- Iconos -->
@@ -75,10 +75,10 @@
                             <a class="nav-link fs-5" href="../#convertite-en-orador">Conviértete en orador</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link nav__text fs-5 active2" href="/comprar/ticket">Comprar tickets</a>
+                            <a class="nav-link nav__text fs-5" href="/comprar/ticket">Comprar tickets</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link fs-5" href="/buscar">Buscar ticket</a>
+                            <a class="nav-link fs-5 active" href="/buscar">Buscar ticket</a>
                         </li>
                         <%
                             if (session.getAttribute("id") == null) {
@@ -155,153 +155,31 @@
     </header>
 
 
-    <!-- Main -->
-    <main class="pt-3 w-100">
-        <section class="comprar-ticket">
+    <div class="d-flex justify-content-center align-items-center">
+        <div class="card-login p-5 border-1">
+            <input type="hidden" name="status" id="status" value="<%= status%>">
+            <input type="hidden" name="msg" id="msg" value="<%= msg%>">
+            <div class="d-flex justify-content-center flex-column align-items-center pb-3 ">
+                <span class="fs-4 text-muted">Buscar un ticket</span>
+            </div>
+
             <div class="container">
-                <div class="row justify-content-center">
-                    <div class=" d-flex justify-content-center align-items-center">
-                        <ul class="m-0 p-0 g-0 gap-4 justify-content-between mb-2 mt-2 operadores__info--cards">
-                            <li onclick="selectCat('Estudiante')" id="estudiante" class="text-decoration-none card operadores__info--card estudiante__card text-center border-primary rounded-0 cursor-pointer" onmouseleave="changeTotal()">
-                                <div class="card-body d-flex justify-content-center align-items-center">
-                                    <div class="d-flex flex-column justify-content-center align-items-center">
-                                        <h5 class="card-title pb-10">Estudiante</h5>
-                                        <h6 class="fw-normal pb-10">Tienen un descuento</h6>
-                                        <h2 class="pb-10">80%</h2>
-                                        <span class="pb-10 text-muted">* presentar documentación</span>
-                                    </div>
-                                </div>
-                            </li>
-                            <li onclick="selectCat('Trainee')" id="trainee" class="text-decoration-none card operadores__info--card text-center trainee__card border-info rounded-0 cursor-pointer" onmouseleave="changeTotal()">
-                                <div class="card-body d-flex justify-content-center align-items-center">
-                                    <div class="d-flex flex-column justify-content-center align-items-center">
-                                        <h5 class="card-title pb-10">Trainee</h5>
-                                        <h6 class="fw-normal pb-10">Tienen un descuento</h6>
-                                        <h2 class="pb-10">50%</h2>
-                                        <span class="pb-10 text-muted">* presentar documentación</span>
-                                    </div>
-                                </div>
-                            </li>
-                            <li onclick="selectCat('Junior')" id="junior" class="text-decoration-none card operadores__info--card text-center junior__card border-warning rounded-0 cursor-pointer" onmouseleave="changeTotal()">
-                                <div class="card-body d-flex justify-content-center align-items-center">
-                                    <div class="d-flex flex-column justify-content-center align-items-center">
-                                        <h5 class="card-title pb-10">Junior</h5>
-                                        <h6 class="fw-normal pb-10">Tienen un descuento</h6>
-                                        <h2 class="pb-10">15%</h2>
-                                        <span class="pb-10 text-muted">* presentar documentación</span>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
 
-
-
-                    <div class="col-12 mt-3">
-                        <h5 class="text-center text-uppercase text-secondary mb-0">
-                            <span class="text-secondary mb-0">
-                                <span class="text-secondary mb-0">Venta</span>
-                            </span>
-                        </h5>
-                        <h1 class="text-uppercase text-center mt-2 fs-1">
-                            Valor de ticket: $200
-                        </h1>
-
-                        <div class="row">
-                            <div class="container mt-3 mb-5">
-                                <input type="hidden" name="status" id="status" value="<%= status%>">                
-                                <input type="hidden" name="msg" id="msg" value="<%= msg%>">
-                                <input type="hidden" name="codigo2" id="codigo2" value="<%= codigo2%>">
-                                <input type="hidden" name="nombre2" id="nombre2" value="<%= nombre2%>">
-                                <input type="hidden" name="apellido2" id="apellido2" value="<%= apellido2%>">
-                                <input type="hidden" name="email2" id="email2" value="<%= email2%>">
-                                <input type="hidden" name="cantidad2" id="cantidad2" value="<%= cantidad2%>">
-                                <input type="hidden" name="total2" id="total2" value="<%= total2%>">
-                                <input type="hidden" name="categoria2" id="categoria2" value="<%= categoria2%>">
-
-
-                                <form id="form" action="/comprar/ticket" class="needs-validation convertite__info--form-ticket" method="POST" novalidate>
-                                    <div class="row">
-                                        <div class="col-md-6 col-sm-12">
-                                            <div class="form-floating mb-3">
-                                                <input type="text" class="form-control text-capitalize" id="nombre" name="nombre" required placeholder="Ingresa tu nombre">
-                                                <label for="floatingInput">Nombre</label>
-                                                <div class="invalid-feedback">
-                                                    Por favor, ingrese su nombre
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 col-sm-12">
-                                            <div class="form-floating mb-3">
-                                                <input type="text" class="form-control text-capitalize" id="apellido" name="apellido" required placeholder="Ingresa tu apellido">
-                                                <label for="floatingInput">Apellido</label>
-                                                <div class="invalid-feedback">
-                                                    Por favor, ingrese su apellido
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-floating mb-3">
-                                                <input type="email" class="form-control" id="correo" name="email" required placeholder="Ingresa tu correo electrónico">
-                                                <label for="floatingInput">Correo Electrónico</label>
-                                                <div class="invalid-feedback">
-                                                    Por favor, ingrese su correo electrónico
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6 col-sm-12">
-                                            <div class="form-floating mb-3">
-                                                <input type="number" class="form-control" id="cantidad" name="cantidad" required placeholder="Ingresa la cantidad" min="1" step="1" onchange="changeTotal()">
-                                                <label for="floatingInput">Cantidad</label>
-                                                <div class="invalid-feedback">
-                                                    Por favor, ingrese su cantidad
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 col-sm-12">
-                                            <div class="form-floating mb-3">
-                                                <input type="text" class="form-control" id="categoria" name="categoria" required placeholder="Selecciona una categoria">
-                                                <label for="floatingInput">Categoria</label>
-                                                <div class="invalid-feedback">
-                                                    Por favor, seleccione una categoria de arriba
-                                                </div>
-                                                <span class="text-muted convertite__info-left d-flex pt-1">Tienes que seleccionar una categoria en las cards de arriba</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <div class="form-floating mb-3">
-                                                <div class="alert alert-info">
-                                                    <h5 class="mb-0 mt-0 text-info-50">
-                                                        Total a pagar: $<span class="text-info-50" id="total">0</span>
-                                                        <input type="hidden" id="total_input" name="total" value="0">
-                                                    </h5>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6 col-sm-12 mb-erase">
-                                            <button type="button" onclick="borrar()" class="d-block btn convertite__info--btn w-100 py-3">Borrar</button>
-                                        </div>
-                                        <div class="col-md-6 col-sm-12">
-                                            <button type="submit" class="d-block btn convertite__info--btn w-100 py-3">Comprar ticket</button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
+                <form class="needs-validation mb-2" novalidate method="post" action="/buscar"> <%--convertite__info--form--%>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" required id="codigo" name="codigo" placeholder="codigo" autocomplete="off" value="<%= codigo != null ? codigo : ""%>">
+                        <label for="floatingInput">Codigo del ticket</label>
+                        <div class="invalid-feedback">
+                            Por favor, ingrese su codigo
                         </div>
                     </div>
-                </div>
+                    <div class="d-block mt-3">
+                        <button class="btn btn-success btn-lg w-100 " type="submit" >Buscar ticket</button>
+                    </div>
+                </form>
             </div>
-        </section>
-    </main>
-    <!-- Fin Main -->
+        </div>
+    </div>
 
     <!-- Footer -->
     <!--  bottom-0 position-fixed w-100 -->
@@ -338,23 +216,16 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
     <script src="../assets/js/validation.js"></script>
-    <script src="../assets/js/ticket.js"></script>
     <script src="../assets/js/icon-menu.js"></script>
     <script src="../assets/js/darkMode.js"></script>
-    <!--<script src="../assets/js/alert.js"></script>-->
+    <script src="../assets/js/alert.js"></script>
 
     <!-- Fin Scripts -->
 
     <%
         session.removeAttribute("status");
         session.removeAttribute("msg");
-        session.removeAttribute("nombre2");
-        session.removeAttribute("codigo2");
-        session.removeAttribute("apellido2");
-        session.removeAttribute("email2");
-        session.removeAttribute("cantidad2");
-        session.removeAttribute("total2");
-        session.removeAttribute("categoria2");
+        session.removeAttribute("codigo");
     %>
 
 </body>

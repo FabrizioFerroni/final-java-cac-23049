@@ -197,6 +197,7 @@
                     <td><%= formattedDateTime%></td>
                     <td>
                         <div class="d-flex flex-row justify-content-center align-items-center gap-1">
+                        <a href="/ticket/<%= ticket.getCodigo() %>" class="btn btn-secondary"> <i class="fas fa-eye"></i> </a>
                             <a href="/admin/ticket/editar/<%= ticket.getId()%>" class="btn btn-info text-white" title="Editar"><i class="fas fa-pen"></i></a>
                             <a href="/admin/ticket/eliminar/<%= ticket.getId()%>" class="btn btn-danger" title="Borrar"><i class="fas fa-trash"></i></a>
                         </div>

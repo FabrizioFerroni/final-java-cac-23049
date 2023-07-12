@@ -74,6 +74,16 @@
         <url-pattern>/admin/ticket/eliminar/*</url-pattern>
     </servlet-mapping>
 
+    <!-- Show Ticket -->
+    ShowTicketServlet
+    <servlet>
+        <servlet-name>ShowTicketServlet</servlet-name>
+        <servlet-class>ar.fabriziodev.finalcacfabrizioferroni.servlets.ShowTicketServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ShowTicketServlet</servlet-name>
+        <url-pattern>/ticket/*</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             60
