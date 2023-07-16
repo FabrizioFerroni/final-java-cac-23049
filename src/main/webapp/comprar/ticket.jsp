@@ -1,6 +1,14 @@
 <%
+
+    if (session.getAttribute("id") == null) {
+        response.sendRedirect("/registrarse");
+    }
+
     String status = (String) session.getAttribute("status");
     String msg = (String) session.getAttribute("msg");
+    String nombre3 = (String) session.getAttribute("nombre");
+    String apellido3 = (String) session.getAttribute("apellido");
+    String email3 = (String) session.getAttribute("email");
 
     String nombre2 = (String) session.getAttribute("nombre2");
     String apellido2 = (String) session.getAttribute("apellido2");
@@ -9,9 +17,20 @@
     Integer cantidad2 = (Integer) session.getAttribute("cantidad2");
     Double total2 = (Double) session.getAttribute("total2");
     String categoria2 = (String) session.getAttribute("categoria2");
+    String dni2 = (String) session.getAttribute("dni2");
+    Long orador2 = (Long) session.getAttribute("orador_2");
+
 %>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="java.util.Date"%>
+<%@page import="java.time.ZoneId"%>
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.time.LocalDateTime"%>
+<%@page import="java.text.NumberFormat" %>
+<%@page import="java.util.Locale" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="ar.fabriziodev.finalcacfabrizioferroni.models.Orador" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -49,110 +68,8 @@
     </svg>
     <!-- Fin Iconos -->
 
-    <!-- Menú -->
-    <header>
-        <nav class="navbar navbar-expand-lg nav__back navbar-dark  mx-auto">
-            <div class="container-fluid">
-                <a class="navbar-brand ms-5 logo" href="/">
-                    <img class="img-fluid" src="../assets/img/codoacodo.png" alt="Logo Codo a Codo" width="100px"> Conf Bs As
-                </a>
-                <!-- <button onclick="cambiarTema()" class="btn btn-rounded-fill text-light menu__movil--moon"><i id="dl-icon" class="fas fa-moon"></i></button> -->
-                <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <i class="fas fa-stream"></i>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav ms-auto">
-                        <li class="nav-item">
-                            <a class="nav-link fs-5" href="../#home">La conferencia</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link fs-5" href="../#los-oradores">Los oradores</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link fs-5" href="../#lugar">El lugar y la fecha</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link fs-5" href="../#convertite-en-orador">Conviértete en orador</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link nav__text fs-5 active2" href="/comprar/ticket">Comprar tickets</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link fs-5" href="/buscar">Buscar ticket</a>
-                        </li>
-                        <%
-                            if (session.getAttribute("id") == null) {
-                        %>
-                        <li class="nav-item">
-                            <a class="nav-link fs-5" href="/iniciarsesion">Iniciar sesion </a>
-                        </li>
-                        <% } else {%>
-                        <ul class="navbar-nav mb-2 mb-lg-0">
-                            <li class="nav-item dropdown">
-                                <button class="btn btn-link nav-link py-2 px-0 px-lg-2 dropdown-toggle d-flex align-items-center" id="bd-theme" type="button" aria-expanded="false" data-bs-toggle="dropdown" data-bs-display="static" aria-label="Toggle theme (auto)">
+    <jsp:include page="../template/nav.jsp"/>
 
-                                    <span class="fs-5" id="bd-theme-text">Hola: <span class="text-success"><%= session.getAttribute("nombre")%></span></span>
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-start">
-                                    <li class="nav-item">
-                                        <a class="dropdown-item d-flex align-items-center" href="/admin/tablero">Tablero</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="dropdown-item d-flex align-items-center " href="/admin/operadores">Oradores</a>
-                                    </li><!-- comment -->
-
-                                    <li class="nav-item">
-                                        <a class="dropdown-item d-flex align-items-center " href="/admin/tickets">Tickets</a>
-                                    </li>
-
-                                    <li class="nav-item">
-                                        <a class="dropdown-item d-flex align-items-center " href="/admin/usuarios">Usuarios</a>
-                                    </li>
-
-
-                                    <li class="nav-item">
-                                        <a class="dropdown-item d-flex align-items-center" href="/cerrarsesion">Cerrar sesion</a>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                        <% }%>
-                    </ul>
-                    <ul class="navbar-nav mb-2 mb-lg-0">
-                        <li class="nav-item dropdown">
-                            <button class="btn btn-link nav-link py-2 px-0 px-lg-2 dropdown-toggle d-flex align-items-center" id="bd-theme" type="button" aria-expanded="false" data-bs-toggle="dropdown" data-bs-display="static" aria-label="Toggle theme (auto)">
-                                <svg class="bi my-1 theme-icon-active"><use href="#circle-half"></use></svg>
-                                <span class="d-lg-none ms-2" id="bd-theme-text">Cambiar tema</span>
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="bd-theme-text">
-                                <li>
-                                    <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="light" aria-pressed="false">
-                                        <svg class="bi me-2 opacity-50 theme-icon"><use href="#sun-fill"></use></svg>
-                                        Claro
-                                        <svg class="bi ms-auto d-none"><use href="#check2"></use></svg>
-                                    </button>
-                                </li>
-                                <li>
-                                    <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="dark" aria-pressed="false">
-                                        <svg class="bi me-2 opacity-50 theme-icon"><use href="#moon-stars-fill"></use></svg>
-                                        Oscuro
-                                        <svg class="bi ms-auto d-none"><use href="#check2"></use></svg>
-                                    </button>
-                                </li>
-                                <li>
-                                    <button type="button" class="dropdown-item d-flex align-items-center active" data-bs-theme-value="auto" aria-pressed="true">
-                                        <svg class="bi me-2 opacity-50 theme-icon"><use href="#circle-half"></use></svg>
-                                        Auto
-                                        <svg class="bi ms-auto d-none"><use href="#check2"></use></svg>
-                                    </button>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
 
 
     <!-- Main -->
@@ -218,13 +135,23 @@
                                 <input type="hidden" name="cantidad2" id="cantidad2" value="<%= cantidad2%>">
                                 <input type="hidden" name="total2" id="total2" value="<%= total2%>">
                                 <input type="hidden" name="categoria2" id="categoria2" value="<%= categoria2%>">
+                                <input type="hidden" name="dni2" id="dni2" value="<%= dni2%>">
+                                <input type="hidden" name="orador_id2" id="orador_id2" value="<%= orador2%>">
+                                <input type="hidden" id="nombre3" value="<%= session.getAttribute("nombre")%>">
+                                <input type="hidden" id="apellido3" value="<%= session.getAttribute("apellido")%>">
+                                <input type="hidden" id="email3" value="<%= session.getAttribute("email")%>">
+
+                                <%
+                                    /*codigo java*/
+                                    ArrayList<Orador> oradores = (ArrayList<Orador>) request.getAttribute("oradores"); //esto es un array
+                                %>
 
 
                                 <form id="form" action="/comprar/ticket" class="needs-validation convertite__info--form-ticket" method="POST" novalidate>
                                     <div class="row">
                                         <div class="col-md-6 col-sm-12">
                                             <div class="form-floating mb-3">
-                                                <input type="text" class="form-control text-capitalize" id="nombre" name="nombre" required placeholder="Ingresa tu nombre">
+                                                <input type="text" class="form-control text-capitalize" id="nombre" name="nombre" required placeholder="Ingresa tu nombre" value="<%= session.getAttribute("nombre") == null ? nombre3 : session.getAttribute("nombre")%>">
                                                 <label for="floatingInput">Nombre</label>
                                                 <div class="invalid-feedback">
                                                     Por favor, ingrese su nombre
@@ -233,7 +160,7 @@
                                         </div>
                                         <div class="col-md-6 col-sm-12">
                                             <div class="form-floating mb-3">
-                                                <input type="text" class="form-control text-capitalize" id="apellido" name="apellido" required placeholder="Ingresa tu apellido">
+                                                <input type="text" class="form-control text-capitalize" id="apellido" name="apellido" required placeholder="Ingresa tu apellido" value="<%= session.getAttribute("apellido") == null ? apellido3 : session.getAttribute("apellido")%>">
                                                 <label for="floatingInput">Apellido</label>
                                                 <div class="invalid-feedback">
                                                     Por favor, ingrese su apellido
@@ -242,12 +169,45 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-12">
+                                        <div class="col-md-6 col-sm-12">
                                             <div class="form-floating mb-3">
-                                                <input type="email" class="form-control" id="correo" name="email" required placeholder="Ingresa tu correo electrónico">
+                                                <input type="email" class="form-control" id="correo" name="email" required placeholder="Ingresa tu correo electrónico" value="<%= session.getAttribute("email") == null ? email3 : session.getAttribute("email")%>">
                                                 <label for="floatingInput">Correo Electrónico</label>
                                                 <div class="invalid-feedback">
                                                     Por favor, ingrese su correo electrónico
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-sm-12">
+                                            <div class="form-floating mb-3">
+                                                <input type="number" class="form-control" id="dni" name="dni" required placeholder="Ingresa tu dni" value="<%= session.getAttribute("dni") == null ? "" : session.getAttribute("dni")%>">
+                                                <label for="floatingInput">Dni</label>
+                                                <div class="invalid-feedback">
+                                                    Por favor, ingrese su dni
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-floating mb-3">
+
+
+                                                <select name="orador_id" id="orador_id" class="form-select text-capitalize" required placeholder="Orador" autocomplete="off" value="<%= session.getAttribute("orador_id") == null ? "" : session.getAttribute("orador_id")%>">
+                                                    <option readonly disabled selected value="">Seleccione una charla</option>
+                                                    <% for (Orador orador : oradores) {%>
+                                                    <option value="<%= orador.getId()%>"
+                                                            <% if (orador.getId().equals(session.getAttribute("orador_id"))) { %>
+                                                            selected
+                                                            <% }%>
+                                                            >
+                                                        ( <%= orador.getNombre()%> <%= orador.getApellido()%> ) - <%= orador.getTema()%>
+                                                    </option>
+                                                    <% } %>
+                                                </select>
+                                                <label for="floatingInput">Charla a la cual quiere ir</label>
+                                                <div class="invalid-feedback">
+                                                    Por favor, ingrese la Charla a la cual quiere ir
                                                 </div>
                                             </div>
                                         </div>

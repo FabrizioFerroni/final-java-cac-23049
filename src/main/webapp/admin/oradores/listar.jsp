@@ -5,6 +5,10 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="ar.fabriziodev.finalcacfabrizioferroni.models.Orador" %>
 <%
+    if (session.getAttribute("rol").equals("user")) {
+        response.sendRedirect("/");
+    }
+
     if (session.getAttribute("id") == null) {
         response.sendRedirect("/iniciarsesion");
     }
@@ -27,7 +31,7 @@
         <link rel="shorcut icon" href="../assets/img/codoacodo.png" type="image/x-png" />
         <link rel="icon" href="../assets/img/codoacodo.png" type="image/x-png" />
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-         <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/dataTables.bootstrap5.min.css"/>
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/dataTables.bootstrap5.min.css"/>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer"
               />
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
@@ -65,34 +69,38 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto">
                         <ul class="navbar-nav mb-2 mb-lg-0">
-                        <li class="nav-item dropdown">
-                            <button class="btn btn-link nav-link py-2 px-0 px-lg-2 dropdown-toggle d-flex align-items-center" id="username" type="button" aria-expanded="false" data-bs-toggle="dropdown" data-bs-display="static" aria-label="Toggle profile options">
-                                
-                                <span class="fs-5" id="bd-theme-text">Hola: <span class="text-success"><%= session.getAttribute("nombre") %></span></span>
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-start">
-                                <li class="nav-item">
-                                    <a class="dropdown-item d-flex align-items-center" href="/admin/tablero">Tablero</a>
-                                </li>
-                                
-                                <li class="nav-item">
-                                    <a class="dropdown-item d-flex align-items-center active" href="/admin/oradores">Oradores</a>
-                                </li><!-- comment -->
-                                
-                                <li class="nav-item">
-                                    <a class="dropdown-item d-flex align-items-center " href="/admin/tickets">Tickets</a>
-                                </li>
-                                
-                                <li class="nav-item">
-                                    <a class="dropdown-item d-flex align-items-center" href="/admin/usuarios">Usuarios</a>
-                                </li>
-                                
-                                <li class="nav-item">
-                                    <a class="dropdown-item d-flex align-items-center" href="/cerrarsesion">Cerrar sesion</a>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
+                            <li class="nav-item dropdown">
+                                <button class="btn btn-link nav-link py-2 px-0 px-lg-2 dropdown-toggle d-flex align-items-center" id="username" type="button" aria-expanded="false" data-bs-toggle="dropdown" data-bs-display="static" aria-label="Toggle profile options">
+
+                                    <span class="fs-5" id="bd-theme-text">Hola: <span class="text-success"><%= session.getAttribute("nombre")%></span></span>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-start">
+                                    <li class="nav-item">
+                                        <a class="dropdown-item d-flex align-items-center" href="/admin/tablero">Tablero</a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a class="dropdown-item d-flex align-items-center active" href="/admin/oradores">Oradores</a>
+                                    </li><!-- comment -->
+
+                                    <li class="nav-item">
+                                        <a class="dropdown-item d-flex align-items-center " href="/admin/tickets">Tickets</a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a class="dropdown-item d-flex align-items-center" href="/admin/usuarios">Usuarios</a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a class="dropdown-item d-flex align-items-center" href="/tickets">Mis tickets</a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a class="dropdown-item d-flex align-items-center" href="/cerrarsesion">Cerrar sesion</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
                     </ul>
                     <ul class="navbar-nav mb-2 mb-lg-0">
                         <li class="nav-item dropdown">
@@ -130,10 +138,10 @@
         </nav>
     </header>
     <!-- Fin Menú -->
-        <input type="hidden" name="status" id="status" value="<%= status%>">                
-        <input type="hidden" name="msg" id="msg" value="<%= msg%>">
-        
-        <div class="container d-flex justify-content-center align-items-center flex-column mt-5 mb-5">
+    <input type="hidden" name="status" id="status" value="<%= status%>">                
+    <input type="hidden" name="msg" id="msg" value="<%= msg%>">
+
+    <div class="container d-flex justify-content-center align-items-center flex-column mt-5 mb-5">
         <h3 class="text-capitalize text-muted text-center">Oradores que quieren presentar una charla</h3>
         <%
             /*codigo java*/
@@ -170,15 +178,15 @@
                 %>
                 <tr>
                     <td><%= orador.getId()%></td>
-                    <td><%= orador.getCodigo() %></td>
+                    <td><%= orador.getCodigo()%></td>
                     <td><%= orador.getNombre()%></td>
                     <td><%= orador.getApellido()%></td>
                     <td><%= orador.getTema()%></td>
                     <td><%= formattedDateTime%></td>
                     <td>
                         <div class="d-flex flex-row justify-content-center align-items-center gap-1">
-                            <a href="/admin/orador/editar/<%= orador.getId() %>" class="btn btn-info text-white" title="Editar"><i class="fas fa-pen"></i></a>
-                            <a href="/admin/orador/eliminar/<%= orador.getId() %>" class="btn btn-danger" title="Borrar"><i class="fas fa-trash"></i></a>
+                            <a href="/admin/orador/editar/<%= orador.getId()%>" class="btn btn-info text-white" title="Editar"><i class="fas fa-pen"></i></a>
+                            <a href="/admin/orador/eliminar/<%= orador.getId()%>" class="btn btn-danger" title="Borrar"><i class="fas fa-trash"></i></a>
                         </div>
                     </td>
                 </tr>
@@ -189,11 +197,11 @@
     </div>
 
 
-        <!-- Scripts -->
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
-        <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-           <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.5/js/dataTables.bootstrap5.min.js"></script>        
 
 
@@ -220,19 +228,18 @@
     <script src="https://cdn.jsdelivr.net/npm/datatables-buttons-excel-styles@1.2.0/js/buttons.html5.styles.min.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/datatables-buttons-excel-styles@1.2.0/js/buttons.html5.styles.templates.min.js"></script>
-    
-        <script src="../assets/js/validation.js"></script>
-        <script src="../assets/js/form.js"></script>
-        <script src="../assets/js/icon-menu.js"></script>
-        <script src="../assets/js/darkMode.js"></script>
-        <script src="../assets/js/alert.js"></script>
 
-        <%
-            session.removeAttribute("status");
-            session.removeAttribute("msg");
-        %>
-        
-         <script>
+    <script src="../assets/js/validation.js"></script>
+    <script src="../assets/js/icon-menu.js"></script>
+    <script src="../assets/js/darkMode.js"></script>
+    <script src="../assets/js/alert.js"></script>
+
+    <%
+        session.removeAttribute("status");
+        session.removeAttribute("msg");
+    %>
+
+    <script>
 
 
         $(document).ready(function () {
@@ -562,5 +569,5 @@
         });
 
     </script>
-    </body>
+</body>
 </html>

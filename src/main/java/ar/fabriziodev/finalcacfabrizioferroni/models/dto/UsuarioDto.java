@@ -1,12 +1,8 @@
-package ar.fabriziodev.finalcacfabrizioferroni.models;
+package ar.fabriziodev.finalcacfabrizioferroni.models.dto;
 
-import java.sql.Date;
 import java.time.LocalDateTime;
 
-public class Usuario {
-
-    protected Long id;
-
+public class UsuarioDto {
     protected  String nombre;
 
     protected String apellido;
@@ -23,12 +19,10 @@ public class Usuario {
 
     protected LocalDateTime updatedAt;
 
-
-    public Usuario() {
+    public UsuarioDto() {
     }
 
-    public Usuario(Long id, String nombre, String apellido, String email, String username, String password, String rol, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this.id = id;
+    public UsuarioDto(String nombre, String apellido, String email, String username, String password, String rol, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.email = email;
@@ -37,14 +31,6 @@ public class Usuario {
         this.rol = rol;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getNombre() {
@@ -111,12 +97,10 @@ public class Usuario {
         this.updatedAt = updatedAt;
     }
 
-
     @Override
     public String toString() {
         return "{" +
-                "id=" + id +
-                ", nombre=" + nombre  +
+                "nombre=" + nombre  +
                 ", apellido=" + apellido +
                 ", username=" + username +
                 ", email=" + email +

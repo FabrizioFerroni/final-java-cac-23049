@@ -1,6 +1,7 @@
 package ar.fabriziodev.finalcacfabrizioferroni.servlets.usuarios;
 
 import ar.fabriziodev.finalcacfabrizioferroni.models.Usuario;
+import ar.fabriziodev.finalcacfabrizioferroni.models.dto.UsuarioDto;
 import ar.fabriziodev.finalcacfabrizioferroni.repository.UserRepository;
 import ar.fabriziodev.finalcacfabrizioferroni.services.UserService;
 import jakarta.servlet.RequestDispatcher;
@@ -36,23 +37,34 @@ public class EditServlet extends HttpServlet {
         String nombre = req.getParameter("nombre");
         String apellido = req.getParameter("apellido");
         String username = req.getParameter("username");
+        String email = req.getParameter("email");
+        String rol = req.getParameter("rol");
         String id = req.getPathInfo().substring(1);
-//
 
-        RequestDispatcher dispatcher = null;
-        if(nombre == "" || apellido == "" || username == ""){
+
+        if(nombre == "" || apellido == "" || username == "" || email == "" || rol == ""){
             req.setAttribute("status", "warning");
             req.setAttribute("msg", "Todos los campos son requeridos");
             req.setAttribute("nombre", nombre);
             req.setAttribute("apellido", apellido);
             req.setAttribute("username", username);
+            req.setAttribute("email", email);
+            req.setAttribute("rol", rol);
             getServletContext().getRequestDispatcher("/admin/usuarios/editar.jsp").forward(req, resp);
         }
 
         nombre = toNomProp(nombre);
         apellido = toNomProp(apellido);
 
-        Usuario edit_user = new Usuario(Long.parseLong(id), nombre, apellido, username);
+        UsuarioDto edit_user = new UsuarioDto();
+
+        edit_user.setNombre(nombre);
+        edit_user.setApellido(apellido);
+        edit_user.setEmail(email);
+        edit_user.setUsername(username);
+        edit_user.setRol(rol);
+
+        System.out.println(edit_user.toString());
 
         UserRepository repo = new UserService();
         HttpSession session = req.getSession();
@@ -69,6 +81,8 @@ public class EditServlet extends HttpServlet {
                 req.setAttribute("nombre", nombre);
                 req.setAttribute("apellido", apellido);
                 req.setAttribute("username", username);
+                req.setAttribute("email", email);
+                req.setAttribute("rol", rol);
                 getServletContext().getRequestDispatcher("/admin/usuarios/editar.jsp").forward(req, resp);
             }
         } catch (Exception ex){
@@ -77,6 +91,8 @@ public class EditServlet extends HttpServlet {
             req.setAttribute("nombre", nombre);
             req.setAttribute("apellido", apellido);
             req.setAttribute("username", username);
+            req.setAttribute("email", email);
+            req.setAttribute("rol", rol);
             getServletContext().getRequestDispatcher("/admin/usuarios/editar.jsp").forward(req, resp);
             System.out.println(ex.getMessage());
         }

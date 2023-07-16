@@ -17,6 +17,10 @@ public class ReadServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String requestURI = req.getRequestURI();
+        String rutaActual = requestURI.substring(req.getContextPath().length()).replace(".jsp", "");
+
+        req.setAttribute("rutaActual", rutaActual);
         OradorRepository repo = new OradorService();
         try{
             ArrayList<Orador> oradores = repo.findAll();

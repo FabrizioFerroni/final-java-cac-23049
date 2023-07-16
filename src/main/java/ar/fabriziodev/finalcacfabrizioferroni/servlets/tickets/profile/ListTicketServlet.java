@@ -1,4 +1,4 @@
-package ar.fabriziodev.finalcacfabrizioferroni.servlets.tickets;
+package ar.fabriziodev.finalcacfabrizioferroni.servlets.tickets.profile;
 
 import ar.fabriziodev.finalcacfabrizioferroni.models.Ticket;
 import ar.fabriziodev.finalcacfabrizioferroni.repository.TicketRepository;
@@ -8,28 +8,34 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
-@WebServlet(name = "readTickets" , urlPatterns = "/admin/tickets")
-public class ReadServlet extends HttpServlet {
+@WebServlet(name="listTicket", urlPatterns = "/tickets")
+public class ListTicketServlet  extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         String requestURI = req.getRequestURI();
         String rutaActual = requestURI.substring(req.getContextPath().length()).replace(".jsp", "");
+        HttpSession session = req.getSession();
+        Long userID  = (Long) session.getAttribute("id");
+
 
         req.setAttribute("rutaActual", rutaActual);
         TicketRepository repo = new TicketService();
         try{
-            ArrayList<Ticket> tickets = repo.findAll();
+            if(userID == null){
+                resp.sendRedirect("/cerrarsesion");
+            }
+            ArrayList<Ticket> tickets = repo.findAllByUser(userID);
             req.setAttribute("tickets", tickets);
         } catch (Exception ex) {
             req.setAttribute("error", ex.getMessage());
         }
-        getServletContext().getRequestDispatcher("/admin/tickets/listar.jsp").forward(req, resp);
+        getServletContext().getRequestDispatcher("/tickets/listar.jsp").forward(req, resp);
     }
 }
-

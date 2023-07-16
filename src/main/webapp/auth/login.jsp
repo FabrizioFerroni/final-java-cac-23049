@@ -1,7 +1,10 @@
 <%
-    if(session.getAttribute("id") != null){
+    if (session.getAttribute("id") != null) {
         response.sendRedirect("/tablero");
     }
+
+    String status = (String) session.getAttribute("status");
+    String msg = (String) session.getAttribute("msg");
 %>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -43,82 +46,16 @@
     <!-- Fin Iconos -->
 
     <!-- Menú -->
-    <header>
-        <nav class="navbar navbar-expand-lg nav__back navbar-dark  mx-auto">
-            <div class="container-fluid">
-                <a class="navbar-brand ms-5 logo" href="/">
-                    <img class="img-fluid" src="./assets/img/codoacodo.png" alt="Logo Codo a Codo" width="100px"> Conf Bs As
-                </a>
-                <!-- <button onclick="cambiarTema()" class="btn btn-rounded-fill text-light menu__movil--moon"><i id="dl-icon" class="fas fa-moon"></i></button> -->
-                <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <i class="fas fa-stream"></i>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav ms-auto">
-                        <li class="nav-item">
-                            <a class="nav-link fs-5" href="/#home">La conferencia</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link fs-5" href="/#los-oradores">Los oradores</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link fs-5" href="/#lugar">El lugar y la fecha</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link fs-5" href="/#convertite-en-orador">Conviértete en orador</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link nav__text fs-5" href="/comprar/ticket">Comprar tickets</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link fs-5" href="/buscar">Buscar ticket</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link fs-5 active" href="/iniciarsesion">Iniciar sesion</a>
-                        </li>
-                    </ul>
-                    <ul class="navbar-nav mb-2 mb-lg-0">
-                        <li class="nav-item dropdown">
-                            <button class="btn btn-link nav-link py-2 px-0 px-lg-2 dropdown-toggle d-flex align-items-center" id="bd-theme" type="button" aria-expanded="false" data-bs-toggle="dropdown" data-bs-display="static" aria-label="Toggle theme (auto)">
-                                <svg class="bi my-1 theme-icon-active"><use href="#circle-half"></use></svg>
-                                <span class="d-lg-none ms-2" id="bd-theme-text">Cambiar tema</span>
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="bd-theme-text">
-                                <li>
-                                    <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="light" aria-pressed="false">
-                                        <svg class="bi me-2 opacity-50 theme-icon"><use href="#sun-fill"></use></svg>
-                                        Claro
-                                        <svg class="bi ms-auto d-none"><use href="#check2"></use></svg>
-                                    </button>
-                                </li>
-                                <li>
-                                    <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="dark" aria-pressed="false">
-                                        <svg class="bi me-2 opacity-50 theme-icon"><use href="#moon-stars-fill"></use></svg>
-                                        Oscuro
-                                        <svg class="bi ms-auto d-none"><use href="#check2"></use></svg>
-                                    </button>
-                                </li>
-                                <li>
-                                    <button type="button" class="dropdown-item d-flex align-items-center active" data-bs-theme-value="auto" aria-pressed="true">
-                                        <svg class="bi me-2 opacity-50 theme-icon"><use href="#circle-half"></use></svg>
-                                        Auto
-                                        <svg class="bi ms-auto d-none"><use href="#check2"></use></svg>
-                                    </button>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
+    <jsp:include page="../template/nav.jsp"/>
+
     <!-- Fin Menú -->
 
     <div class="d-flex justify-content-center align-items-center">
         <div class="card-login p-5 border-1">
-            
-            <div class="d-flex justify-content-center flex-column align-items-center pb-3 ">
 
+            <div class="d-flex justify-content-center flex-column align-items-center pb-3 ">
+                <input type="hidden" name="status" id="status" value="<%= status%>">
+                <input type="hidden" name="msg" id="msg" value="<%= msg%>">
                 <span class="fs-1 text-muted">Iniciar sesión</span>
             </div>
 
@@ -181,10 +118,14 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
     <script src="../assets/js/validation.js"></script>
-    <script src="../assets/js/form.js"></script>
     <script src="../assets/js/icon-menu.js"></script>
     <script src="../assets/js/darkMode.js"></script>
     <script src="../assets/js/alert.js"></script>
+    
+     <%
+        session.removeAttribute("status");
+        session.removeAttribute("msg");
+    %>
 
     <!-- Fin Scripts -->
 </body>

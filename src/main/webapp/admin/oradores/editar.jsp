@@ -3,6 +3,10 @@
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.time.LocalDateTime"%>
 <%
+    if (session.getAttribute("rol").equals("user")) {
+        response.sendRedirect("/");
+    }
+
     if (session.getAttribute("id") == null) {
         response.sendRedirect("/iniciarsesion");
     }
@@ -19,7 +23,7 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Editar usuario - Trabajo Integrador Final CAC 23049 - Fabrizio Ferroni</title>
+        <title>Editar orador - Trabajo Integrador Final CAC 23049 - Fabrizio Ferroni</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
         <link rel="stylesheet" href="../../../assets/css/normalize.css">
         <link rel="stylesheet" href="../../../assets/css/styles.css">
@@ -90,6 +94,10 @@
                                     </li>
 
                                     <li class="nav-item">
+                                        <a class="dropdown-item d-flex align-items-center" href="/tickets">Mis tickets</a>
+                                    </li>
+
+                                    <li class="nav-item">
                                         <a class="dropdown-item d-flex align-items-center" href="/cerrarsesion">Cerrar sesion</a>
                                     </li>
                                 </ul>
@@ -132,15 +140,15 @@
         </nav>
     </header>
     <!-- Fin Menu -->
-    
-      <%
+
+    <%
         /*codigo java*/
         Orador orador = (Orador) request.getAttribute("orador");
     %>
-    
-        <div class="d-flex justify-content-center align-items-center">
+
+    <div class="d-flex justify-content-center align-items-center">
         <div class="card-login p-5 border-1">
-        <input type="hidden" name="status" id="status" value="<%= status%>">
+            <input type="hidden" name="status" id="status" value="<%= status%>">
             <input type="hidden" name="msg" id="msg" value="<%= msg%>">
             <div class="d-flex justify-content-center flex-column align-items-center pb-3 ">
                 <span class="fs-4 text-muted">Editar orador</span>
@@ -150,7 +158,7 @@
 
                 <form class="needs-validation mb-2" novalidate method="post" action="/admin/orador/editar/<%=orador.getId()%>"> <%--convertite__info--form--%>
                     <div class="form-floating mb-3">
-                        <input type="text" class="form-control" required id="nombre" name="nombre" placeholder="Nombre" autocomplete="off" value="<%= request.getAttribute("nombre") != null ? request.getAttribute("nombre") :  orador.getNombre() %>">
+                        <input type="text" class="form-control" required id="nombre" name="nombre" placeholder="Nombre" autocomplete="off" value="<%= request.getAttribute("nombre") != null ? request.getAttribute("nombre") : orador.getNombre()%>">
                         <label for="floatingInput">Nombre</label>
                         <div class="invalid-feedback">
                             Por favor, ingrese su nombre
@@ -163,26 +171,37 @@
                             Por favor, ingrese su apellido
                         </div>
                     </div>
+
+
+                    <div class="form-floating mb-3">
+                        <input onkeyup="countChars(85, this);" type="text" class="form-control" id="tema" name="tema" required placeholder="Ingresa el tema" value="<%= request.getAttribute("tema") != null ? request.getAttribute("tema") : orador.getTema()%>">
+                        <label for="floatingInput">Tema sobre que quieres hablar?</label>
+                        <div class="invalid-feedback">
+                            Por favor, ingrese su tema de lo que va a hablar
+                        </div>
+                        <span id="charNum" class="text-muted convertite__info-left d-flex pt-1">85 caracteres restantes</span>
+                        </div>
+
                     <div class="form-floating mb-3">
                         <!--<textarea type="text" class="form-control" required id="username" name="username" placeholder="Username" autocomplete="off"></textarea>-->
-                        <textarea class="form-control convertite__info--textarea" name="tema" id="mensaje" cols="30" rows="10" required placeholder="Sobre que quieres hablar?" height="30px"><%= request.getAttribute("tema") != null ? request.getAttribute("tema") : orador.getTema()%></textarea>
-                        <label for="floatingInput">Tema a debatir</label>
+                        <textarea class="form-control convertite__info--textarea" name="descripcion" id="descripcion" cols="30" rows="10" required placeholder="Detalla sobre que quieres hablar?" height="30px"><%= request.getAttribute("descripcion") != null ? request.getAttribute("descripcion") : orador.getDescripcion()%></textarea>
+                        <label for="floatingInput">Detalle sobre lo que quieres hablar?</label>
                         <div class="invalid-feedback">
-                            Por favor, ingrese su nombre de usuario
+                            Por favor, ingrese el detalle del tema de lo que va a hablar
                         </div>
                     </div>
-                   
+
                     <div class="d-block mt-3">
                         <button class="btn btn-success btn-lg w-100" type="submit" name="action" value="editar">Editar orador</button>
-                        
+
                     </div>
                 </form>
-                        <a href="/admin/oradores" class="text-decoration-none">Volver</a>
+                <a href="/admin/oradores" class="text-decoration-none">Volver</a>
             </div>
         </div>
     </div>
-    
-     <!-- Scripts -->
+
+    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
 

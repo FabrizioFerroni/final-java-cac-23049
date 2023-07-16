@@ -2,6 +2,7 @@ package ar.fabriziodev.finalcacfabrizioferroni.services;
 
 import ar.fabriziodev.finalcacfabrizioferroni.data.Conexion;
 import ar.fabriziodev.finalcacfabrizioferroni.models.Orador;
+import ar.fabriziodev.finalcacfabrizioferroni.models.dto.OradorDto;
 import ar.fabriziodev.finalcacfabrizioferroni.repository.OradorRepository;
 
 import java.sql.Connection;
@@ -18,7 +19,7 @@ public class OradorService implements OradorRepository {
 
     @Override
     public ArrayList<Orador> findAll() throws Exception {
-        String sql = "SELECT * FROM "+this.tableName+"";
+        String sql = "SELECT * FROM "+this.tableName+" ORDER BY ID DESC";
 
         //Obtener la Conection
         Connection con = Conexion.getConnection();
@@ -28,24 +29,37 @@ public class OradorService implements OradorRepository {
 
         ArrayList<Orador> oradores = new ArrayList<>();
 
+
         ResultSet res = pst.executeQuery();
 
         while(res.next()){
+            Orador orador = new Orador();
+
             Long id = res.getLong(1);
             String codigo = res.getString(2);
             String nombre = res.getString(3);
             String apellido = res.getString(4);
             String tema = res.getString(5);
-            Timestamp timestamp = res.getTimestamp(6);
+            String descripcion = res.getString(6);
+            Timestamp timestamp = res.getTimestamp(7);
             LocalDateTime createdAt = timestamp.toLocalDateTime();
-            oradores.add(new Orador(id, codigo,  nombre, apellido, tema, createdAt));
+
+            orador.setId(id);
+            orador.setCodigo(codigo);
+            orador.setNombre(nombre);
+            orador.setApellido(apellido);
+            orador.setTema(tema);
+            orador.setDescripcion(descripcion);
+            orador.setCreatedAt(createdAt);
+
+            oradores.add(orador);
         }
         return oradores;
     }
 
     @Override
     public Orador getById(Long id) throws Exception {
-            String sql = "select * from "+this.tableName+" where id =?";
+            String sql = "select * from "+this.tableName+" where id =? ORDER BY ID DESC";
 
             //Obtener la Conection
             Connection con = Conexion.getConnection();
@@ -55,7 +69,7 @@ public class OradorService implements OradorRepository {
 
             pst.setLong(1,id);
 
-            Orador orador = null;
+            Orador orador = new Orador();
 
             ResultSet res = pst.executeQuery();
 
@@ -65,19 +79,26 @@ public class OradorService implements OradorRepository {
                 String nombre = res.getString(3);
                 String apellido = res.getString(4);
                 String tema = res.getString(5);
-                Timestamp timestamp = res.getTimestamp(6);
+                String descripcion = res.getString(6);
+                Timestamp timestamp = res.getTimestamp(7);
                 LocalDateTime createdAt = timestamp.toLocalDateTime();
 
-                orador = new Orador(_id, codigo, nombre, apellido, tema, createdAt);
+                orador.setId(_id);
+                orador.setCodigo(codigo);
+                orador.setNombre(nombre);
+                orador.setApellido(apellido);
+                orador.setTema(tema);
+                orador.setDescripcion(descripcion);
+                orador.setCreatedAt(createdAt);
             }
             return orador;
     }
 
     @Override
-    public boolean create(Orador orador) throws Exception {
+    public boolean create(OradorDto orador) throws Exception {
         String sql = "INSERT INTO "+this.tableName+ " ";
-        sql += " (codigo, nombre, apellido, tema, created_at)";
-        sql += " values (?, ?, ?, ?, CURRENT_TIMESTAMP) ";
+        sql += " (codigo, nombre, apellido, tema, descripcion, created_at)";
+        sql += " values (?, ?, ?, ?, ?, CURRENT_TIMESTAMP) ";
 
         //Obtener la Conection
         Connection con = Conexion.getConnection();
@@ -89,6 +110,7 @@ public class OradorService implements OradorRepository {
         pst.setString(2, orador.getNombre());
         pst.setString(3, orador.getApellido());
         pst.setString(4, orador.getTema());
+        pst.setString(5, orador.getDescripcion());
 
         int result = pst.executeUpdate();
 
@@ -100,9 +122,9 @@ public class OradorService implements OradorRepository {
     }
 
     @Override
-    public boolean update(Long id, Orador orador) throws Exception {
+    public boolean update(Long id, OradorDto orador) throws Exception {
         String sql = "UPDATE "+this.tableName+ " ";
-        sql += " SET nombre=?,apellido=?,tema=?,updated_at=CURRENT_TIMESTAMP WHERE id = ? ";
+        sql += " SET nombre=?,apellido=?,tema=?, descripcion=? ,updated_at=CURRENT_TIMESTAMP WHERE id = ? ";
 
         //Obtener la Conection
         Connection con = Conexion.getConnection();
@@ -113,7 +135,8 @@ public class OradorService implements OradorRepository {
         pst.setString(1, orador.getNombre());
         pst.setString(2, orador.getApellido());
         pst.setString(3, orador.getTema());
-        pst.setLong(4, id);
+        pst.setString(4, orador.getDescripcion());
+        pst.setLong(5, id);
 
 
         int result = pst.executeUpdate();

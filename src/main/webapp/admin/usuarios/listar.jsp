@@ -3,12 +3,20 @@
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.time.LocalDateTime"%>
 <%
+    
+    if(session.getAttribute("rol").equals("user")){
+        response.sendRedirect("/");
+    }
+    
     if (session.getAttribute("id") == null) {
         response.sendRedirect("/iniciarsesion");
     }
+    
+     
     String status = (String) session.getAttribute("status");
     String msg = (String) session.getAttribute("msg");
 %>
+<!--<%= session.getAttribute("rol") %>-->
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="ar.fabriziodev.finalcacfabrizioferroni.models.Usuario" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -87,6 +95,10 @@
                                     <li class="nav-item">
                                         <a class="dropdown-item d-flex align-items-center active" href="/admin/usuarios">Usuarios</a>
                                     </li>
+                                    
+                                    <li class="nav-item">
+                                        <a class="dropdown-item d-flex align-items-center" href="/tickets">Mis tickets</a>
+                                    </li>
 
                                     <li class="nav-item">
                                         <a class="dropdown-item d-flex align-items-center" href="/cerrarsesion">Cerrar sesion</a>
@@ -130,6 +142,8 @@
             </div>
         </nav>
     </header>
+                                
+                                    
     <!-- Fin Menú -->
     <input type="hidden" name="status" id="status" value="<%= status%>">                
     <input type="hidden" name="msg" id="msg" value="<%= msg%>">
@@ -148,6 +162,8 @@
                     <th class="text-center">Nombre</th>
                     <th class="text-center">Apellido</th>
                     <th class="text-center">Username</th>
+                    <th class="text-center">Email</th>
+                    <th class="text-center">Rol</th>
                     <th class="text-center">Fecha de creacion</th>
                     <th class="text-center" width="15px">Acciones</th>
                 </tr>
@@ -173,6 +189,8 @@
                     <td><%= user.getNombre()%></td>
                     <td><%= user.getApellido()%></td>
                     <td><%= user.getUsername()%></td>
+                    <td><%= user.getEmail()%></td>
+                    <td class="text-capitalize"><%= user.getRol()%></td>
                     <td><%= formattedDateTime%></td>
                     <td>
                         <div class="d-flex flex-row justify-content-center align-items-center gap-1">
@@ -222,7 +240,6 @@
 
 
     <script src="../assets/js/validation.js"></script>
-    <script src="../assets/js/form.js"></script>
     <script src="../assets/js/icon-menu.js"></script>
     <script src="../assets/js/darkMode.js"></script>
     <script src="../assets/js/alert.js"></script>

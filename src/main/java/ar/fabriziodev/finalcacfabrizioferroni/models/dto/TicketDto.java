@@ -1,10 +1,8 @@
-package ar.fabriziodev.finalcacfabrizioferroni.models;
+package ar.fabriziodev.finalcacfabrizioferroni.models.dto;
 
 import java.time.LocalDateTime;
 
-public class Ticket {
-
-    protected Long id;
+public class TicketDto {
 
     protected  String codigo;
 
@@ -31,13 +29,10 @@ public class Ticket {
 
     protected Long oradorId;
 
-    public Orador orador;
-
-    public Ticket() {
+    public TicketDto() {
     }
 
-    public Ticket(Long id, String codigo, String nombre, String apellido, String email, String dni, Integer cantidad, double total, String categoria, LocalDateTime createdAt, LocalDateTime updatedAt, Long userId, Long oradorId, Orador orador) {
-        this.id = id;
+    public TicketDto(String codigo, String nombre, String apellido, String email, String dni, Integer cantidad, double total, String categoria, LocalDateTime createdAt, LocalDateTime updatedAt, Long userId, Long oradorId) {
         this.codigo = codigo;
         this.nombre = nombre;
         this.apellido = apellido;
@@ -50,15 +45,6 @@ public class Ticket {
         this.updatedAt = updatedAt;
         this.userId = userId;
         this.oradorId = oradorId;
-        this.orador = orador;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getCodigo() {
@@ -155,34 +141,5 @@ public class Ticket {
 
     public void setOradorId(Long oradorId) {
         this.oradorId = oradorId;
-    }
-
-    public Orador getOrador() {
-        return orador;
-    }
-
-    public void setOrador(Orador orador) {
-        this.orador = orador;
-    }
-
-    public Long toOradorId(){
-        return oradorId;
-    }
-    @Override
-    public String toString() {
-        return "{" +
-                "id=" + id +
-                ", codigo=" + codigo +
-                ", nombre=" + nombre +
-                ", apellido=" + apellido +
-                ", email=" + email +
-                ", cantidad=" + cantidad +
-                ", total=" + total +
-                ", categoria=" + categoria +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                ", user=" + userId +
-                ", orador=" + orador +
-                '}';
     }
 }

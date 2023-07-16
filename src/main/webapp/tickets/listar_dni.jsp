@@ -1,16 +1,27 @@
 <%
+
     String status = (String) session.getAttribute("status");
     String msg = (String) session.getAttribute("msg");
 
-    String codigo = (String) session.getAttribute("codigo");
+    String nombre2 = (String) session.getAttribute("nombre2");
+    String apellido2 = (String) session.getAttribute("apellido2");
+    String email2 = (String) session.getAttribute("email2");
+    String codigo2 = (String) session.getAttribute("codigo2");
+    Integer cantidad2 = (Integer) session.getAttribute("cantidad2");
+    Double total2 = (Double) session.getAttribute("total2");
+    String categoria2 = (String) session.getAttribute("categoria2");
+
+
 %>
+
 <%@page import="java.util.Date"%>
 <%@page import="java.time.ZoneId"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.time.LocalDateTime"%>
+<%@page import="java.text.NumberFormat" %>
+<%@page import="java.util.Locale" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="ar.fabriziodev.finalcacfabrizioferroni.models.Ticket" %>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -18,14 +29,15 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Ver Ticket Comprado - Trabajo Integrador Bootstrap CAC 23049 - Fabrizio Ferroni</title>
+        <title>Ver Mis Tickets - Trabajo Integrador Bootstrap CAC 23049 - Fabrizio Ferroni</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
-        <link rel="stylesheet" href="../assets/css/normalize.css">
-        <link rel="stylesheet" href="../assets/css/styles.css">
-        <link rel="stylesheet" href="../assets/css/ticket.css">
-        <link rel="apple-touch-icon" href="../assets/img/codoacodo.png" />
-        <link rel="shorcut icon" href="../assets/img/codoacodo.png" type="image/x-png" />
-        <link rel="icon" href="../assets/img/codoacodo.png" type="image/x-png" />
+        <link rel="stylesheet" href="../../assets/css/normalize.css">
+        <link rel="stylesheet" href="../../assets/css/styles.css">
+        <link rel="stylesheet" href="../../assets/css/ticket.css">
+
+        <link rel="apple-touch-icon" href="../../assets/img/codoacodo.png" />
+        <link rel="shorcut icon" href="../../assets/img/codoacodo.png" type="image/x-png" />
+        <link rel="icon" href="../../assets/img/codoacodo.png" type="image/x-png" />
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer"
               />
@@ -33,6 +45,16 @@
         <meta name="description" content="Proyecto final de bootstrap para la comision 23049 del curso de Java en Codo a Codo.">
         <meta name="keywords" content="HTML, CSS, JavaScript, Bootstrap, Codo a Codo, Java Inicial">
         <meta name="author" content="Fabrizio Ferroni">
+        <style>
+            * {
+                box-sizing: border-box;
+                margin:0;
+                padding:0;
+            }
+            .pl-2{
+                padding-left: .5rem;
+            }
+        </style>
     </head>
     <body>
         <!-- Iconos -->
@@ -50,16 +72,18 @@
     </svg>
     <!-- Fin Iconos -->
 
-    <!-- MenÃº -->
+    <!-- Menú -->
+
+
+    <%        /*codigo java*/
+        ArrayList<Ticket> tickets = (ArrayList<Ticket>) request.getAttribute("tickets"); //esto es un array
+    %>
+
     <header>
-        <%
-            /*codigo java*/
-            Ticket ticket = (Ticket) request.getAttribute("ticket");
-        %>
         <nav class="navbar navbar-expand-lg nav__back navbar-dark  mx-auto">
             <div class="container-fluid">
                 <a class="navbar-brand ms-5 logo" href="/">
-                    <img class="img-fluid" src="../assets/img/codoacodo.png" alt="Logo Codo a Codo" width="100px"> Conf Bs As
+                    <img class="img-fluid" src="../../assets/img/codoacodo.png" alt="Logo Codo a Codo" width="100px"> Conf Bs As
                 </a>
                 <!-- <button onclick="cambiarTema()" class="btn btn-rounded-fill text-light menu__movil--moon"><i id="dl-icon" class="fas fa-moon"></i></button> -->
                 <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -87,14 +111,14 @@
                         </li>
                         <%
                             }
-                            if (ticket.getCodigo() == null) {
+                            if (tickets == null || tickets.size() == 0) {
                         %>
                         <li class="nav-item">
                             <a class="nav-link fs-5 active" href="/buscar">Buscar ticket</a>
                         </li>
                         <% } else {%>
                         <li class="nav-item">
-                            <a class="nav-link fs-5 active" href="/ticket/<%= ticket.getCodigo()%>">Ver ticket</a>
+                            <a class="nav-link fs-5 active" href="/tickets/dni/<%= request.getAttribute("dni")%>">Ver tickets por dni</a>
                         </li>
 
                         <%
@@ -114,7 +138,7 @@
                                 <ul class="dropdown-menu dropdown-menu-start">
                                     <%
                                         if (session.getAttribute("rol").equals("admin")) {
-                                    %> 
+                                    %>
                                     <li class="nav-item">
                                         <a class="dropdown-item d-flex align-items-center" href="/admin/tablero">Tablero</a>
                                     </li>
@@ -178,38 +202,107 @@
             </div>
         </nav>
     </header>
+    <input type="hidden" name="status" id="status" value="<%= status%>">                
+    <input type="hidden" name="msg" id="msg" value="<%= msg%>">
+
+    <div class="container-ticket">
+        <div class="d-flex flex-column align-items-center">
+            <h1 class="pagina__heading">Mis tickets adquiridos</h1>
+            <a href="/buscar" class="btn w-20p btn-md btn-secondary text-white <%= (tickets.size() > 0) ? "" : "d-none"%>"> <i class="fas fa-arrow-left"></i> Volver a buscar un ticket</a>
+
+        </div>
+        <%
+            if (tickets == null || tickets.size() == 0) {
 
 
-    <!-- Ticket -->
+        %>
 
+        <div>
+            <div class="pagina__descripcion d-block text-center"><span class="form-text text-black fw-bolder">No hay tickets comprado o asociados a tu dni</span></div>
+            <div class="d-flex justify-content-center align-items-center gap-5 pt-4 flex-column flex-md-row"><img src="../../assets/img/no.svg" alt="No hay tickets" class="w-20"></div>
+            <div class="d-flex justify-content-center align-items-center mt-5 mb-5"><a href="/comprar/ticket" class="text-white btn btn-info"><i class="fas fa-money-check-alt"></i> Comprar ticket</a></div>
+        </div>
+        <%        } else {
+            for (Ticket ticket : tickets) {
 
-    <input type="hidden" name="codigo2" id="codigo2" value="<%= ticket.getCodigo()%>">
-    <main class="pagina">
-        <h2 class="pagina__heading">Asistencia a Conf Bs As</h2>
-        <p class="pagina__descripcion mb-6">Tu Boleto. Te recomendamos almacenarlo, puedes compartirlo en redes sociales.</p>
+                // Supongamos que tienes un objeto LocalDateTime llamado createdAt
+                LocalDateTime createdAt = ticket.getCreatedAt();
 
-        <div class="boleto-virtual">
-            <div class="boleto boleto--<%= ticket.getCategoria()%> boleto--acceso">
-                <div class="boleto__contenido">
-                    <h4 class="boleto__logo"><%= ticket.orador.getTema() %></h4>
-                    <p class="boleto__plan"><%= ticket.getCategoria()%> </p>
-                    <p class="boleto__nombre"> <%= ticket.getNombre()%> <%= ticket.getApellido()%> </p>
+                // Define el formato deseado
+                SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+
+                // Convierte LocalDateTime a Date
+                Date createdAtDate = Date.from(createdAt.atZone(ZoneId.systemDefault()).toInstant());
+
+                // Aplica el formato a la fecha
+                String formattedDateTime = formatter.format(createdAtDate);
+
+                double precio = ticket.getTotal();
+
+                // Crea un objeto NumberFormat para el formato monetario
+                NumberFormat formatoMonetario = NumberFormat.getCurrencyInstance(new Locale("es", "AR"));
+
+                // Establece la cantidad máxima de dígitos decimales a mostrar
+                formatoMonetario.setMaximumFractionDigits(0);
+
+                // Formatea el precio
+                String precioFormateado = formatoMonetario.format(precio);
+        %>
+        <div class="item">
+            <div class="item-right">
+                <div class="conf-title">
+                    <div class="text-center pl-c-5">
+                        <span class="fs-6 text-center span-color">Conf Bs As</span>
+                    </div>
+                    <h2 class="num">Oct</h2>
+                    <p class="day">23</p>
+                </div>
+                <span class="up-border"></span>
+                <span class="down-border"></span>
+            </div> <!-- end item-right -->
+
+            <div class="item-left">
+                <p class="event"><%= ticket.getCategoria()%> </p>
+                <h2 class="title text-capitalize texto-largo"  data-bs-toggle="tooltip" data-bs-placement="top"
+                    data-bs-custom-class="custom-tooltip"
+                    data-bs-title="<%= ticket.orador.getTema()%>" ><%= ticket.orador.getTema()%></h2>
+
+                <div class="sce">
+                    <div class="icon">
+                        <i class="fa fa-user"></i>
+                    </div>
+                    <p class="text-capitalize"><%= ticket.getNombre()%> <%= ticket.getApellido()%></p>
+                </div>
+                <div class="fix"></div>
+                <div class="loc ">
+                    <div class="icon">
+                        <i class="fa fa-hand-holding-usd"></i>
+                    </div>
+                    <p><%= ticket.getCantidad()%></p>
+                    <div class="icon pl-2">
+                        <i class="fa fa-money-bill-alt"></i>
+                    </div>
+                    <p><%= precioFormateado%></p>
                 </div>
 
-                <p class="boleto__codigo">#<%= ticket.getCodigo()%></p>
-            </div>
-        </div>
-    </main>
-    <div class="buttons-tickets">
-        <a href="/buscar" class="btn btn-md btn-secondary text-white"> <i class="fas fa-arrow-left"></i> Volver a buscar un ticket</a>
-        <a class="btn btn-md btn-info text-white" href="javascript:getlink();"> <i class="fas fa-copy"></i> Copiar enlace</a>
-        <img class="d-none" alt="Código QR" id="codigo">
-        <a class="btn btn-md btn-warning text-white" id="btnDescargar" href="javascript:void(0);"> <i class="fas fa-qrcode"></i> Generar QR</a>
+                <div class="fix"></div>
+                <a href="/ticket/<%= ticket.getCodigo()%>" class="btn btn-secondary tickets">Ver ticket</a>
+            </div> <!-- end item-right -->
+        </div> <!-- end item -->
+
+
+        <% } %>
+
+        <%
+            }
+        %>
     </div>
+
+
 
     <!-- Footer -->
     <!--  bottom-0 position-fixed w-100 -->
-    <footer class="mt-5 text-white footer__info--bg py-4 ">
+    <footer class="mt-5 text-white footer__info--bg py-4 <%= (tickets.size() < 3 && tickets.size() > 0) ? "mt-custom" : ""%> ">
         <!-- <div class="d-flex"> -->
         <ul class="footer__info container w-100">
             <li>
@@ -241,21 +334,24 @@
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
-    <script src="https://unpkg.com/qrious@4.0.2/dist/qrious.js"></script>
-    <script src="../assets/js/validation.js"></script>
-    <script src="../assets/js/icon-menu.js"></script>
-    <script src="../assets/js/darkMode.js"></script>
-    <!--<script src="../assets/js/alert.js"></script>-->
-    <script src="../assets/js/functions.js"></script>
-
+    <script src="../../assets/js/validation.js"></script>
+    <script src="../../assets/js/icon-menu.js"></script>
+    <script src="../../assets/js/darkMode.js"></script>
+    <script src="../../assets/js/alert.js"></script>
 
     <!-- Fin Scripts -->
 
-    <%
-        session.removeAttribute("status");
+    <%        session.removeAttribute("status");
         session.removeAttribute("msg");
         session.removeAttribute("codigo");
     %>
+    <script>
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+    </script>
 
 </body>
 </html>
+

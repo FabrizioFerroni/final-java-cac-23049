@@ -1,5 +1,8 @@
 package ar.fabriziodev.finalcacfabrizioferroni.services;
 
+import ar.fabriziodev.finalcacfabrizioferroni.models.dto.TicketDto;
+import ar.fabriziodev.finalcacfabrizioferroni.services.OradorService;
+
 import ar.fabriziodev.finalcacfabrizioferroni.data.Conexion;
 import ar.fabriziodev.finalcacfabrizioferroni.models.Orador;
 import ar.fabriziodev.finalcacfabrizioferroni.models.Ticket;
@@ -14,13 +17,18 @@ import java.util.ArrayList;
 
 public class TicketService implements TicketRepository {
 
+    private OradorService oradorService;
+
     private String tableName;
 
-    public TicketService(){ this.tableName = "tickets"; }
+    public TicketService(){
+        oradorService = new OradorService();
+        this.tableName = "tickets";
+    }
 
     @Override
     public ArrayList<Ticket> findAll() throws Exception {
-        String sql = "SELECT * FROM "+this.tableName+"";
+        String sql = "SELECT * FROM "+this.tableName+" ORDER BY ID DESC";
 
         //Obtener la Conection
         Connection con = Conexion.getConnection();
@@ -30,27 +38,48 @@ public class TicketService implements TicketRepository {
 
         ArrayList<Ticket> tickets = new ArrayList<>();
 
+
         ResultSet res = pst.executeQuery();
 
         while(res.next()){
+            Ticket ticket = new Ticket();
             Long id = res.getLong(1);
             String codigo = res.getString(2);
             String nombre = res.getString(3);
             String apellido = res.getString(4);
             String email = res.getString(5);
-            Integer cantidad = res.getInt(6);
-            Double total = res.getDouble(7);
-            String categoria = res.getString(8);
-            Timestamp timestamp = res.getTimestamp(9);
+            String dni = res.getString(6);
+            Integer cantidad = res.getInt(7);
+            Double total = res.getDouble(8);
+            String categoria = res.getString(9);
+            Timestamp timestamp = res.getTimestamp(10);
             LocalDateTime createdAt = timestamp.toLocalDateTime();
-            tickets.add(new Ticket(id, codigo,  nombre, apellido, email, cantidad, total, categoria, createdAt));
+            Long userId  = res.getLong(12);
+            Long oradorId  = res.getLong(13);
+            Orador orador = oradorService.getById(oradorId);
+
+            ticket.setId(id);
+            ticket.setCodigo(codigo);
+            ticket.setNombre(nombre);
+            ticket.setApellido(apellido);
+            ticket.setEmail(email);
+            ticket.setDni(dni);
+            ticket.setCantidad(cantidad);
+            ticket.setTotal(total);
+            ticket.setCategoria(categoria);
+            ticket.setCreatedAt(createdAt);
+            ticket.setUserId(userId);
+            ticket.setOrador(orador);
+
+            tickets.add(ticket);
         }
+
         return tickets;
     }
 
     @Override
-    public Ticket getById(Long id) throws Exception {
-        String sql = "select * from "+this.tableName+" where id =?";
+    public ArrayList<Ticket> findAllByUser(Long id) throws Exception {
+        String sql = "SELECT * FROM "+this.tableName+" where user_id=? ORDER BY ID DESC";
 
         //Obtener la Conection
         Connection con = Conexion.getConnection();
@@ -60,9 +89,62 @@ public class TicketService implements TicketRepository {
 
         pst.setLong(1,id);
 
-        Ticket ticket = null;
+        ArrayList<Ticket> tickets = new ArrayList<>();
+
 
         ResultSet res = pst.executeQuery();
+
+        while(res.next()){
+            Ticket ticket = new Ticket();
+            Long _id = res.getLong(1);
+            String codigo = res.getString(2);
+            String nombre = res.getString(3);
+            String apellido = res.getString(4);
+            String email = res.getString(5);
+            String dni = res.getString(6);
+            Integer cantidad = res.getInt(7);
+            Double total = res.getDouble(8);
+            String categoria = res.getString(9);
+            Timestamp timestamp = res.getTimestamp(10);
+            LocalDateTime createdAt = timestamp.toLocalDateTime();
+            Long userId  = res.getLong(12);
+            Long oradorId = res.getLong(13);
+            Orador orador = oradorService.getById(oradorId);
+
+            ticket.setId(_id);
+            ticket.setCodigo(codigo);
+            ticket.setNombre(nombre);
+            ticket.setApellido(apellido);
+            ticket.setEmail(email);
+            ticket.setDni(dni);
+            ticket.setCantidad(cantidad);
+            ticket.setTotal(total);
+            ticket.setCategoria(categoria);
+            ticket.setCreatedAt(createdAt);
+            ticket.setUserId(userId);
+            ticket.setOrador(orador);
+
+            tickets.add(ticket);
+        }
+        return tickets;
+    }
+
+    @Override
+    public Ticket getById(Long id) throws Exception {
+        String sql = "select * from "+this.tableName+" where id =? ORDER BY ID DESC";
+
+        //Obtener la Conection
+        Connection con = Conexion.getConnection();
+
+        //PreparedStatement con mi sql
+        PreparedStatement pst = con.prepareStatement(sql);
+
+        pst.setLong(1,id);
+
+        Ticket ticket = new Ticket();
+
+        ResultSet res = pst.executeQuery();
+
 
         if(res.next()) {
             Long _id = res.getLong(1);
@@ -70,19 +152,35 @@ public class TicketService implements TicketRepository {
             String nombre = res.getString(3);
             String apellido = res.getString(4);
             String email = res.getString(5);
-            Integer cantidad = res.getInt(6);
-            Double total = res.getDouble(7);
-            String categoria = res.getString(8);
-            Timestamp timestamp = res.getTimestamp(9);
+            String dni = res.getString(6);
+            Integer cantidad = res.getInt(7);
+            Double total = res.getDouble(8);
+            String categoria = res.getString(9);
+            Timestamp timestamp = res.getTimestamp(10);
             LocalDateTime createdAt = timestamp.toLocalDateTime();
-            ticket = new Ticket(_id, codigo, nombre, apellido, email, cantidad, total, categoria, createdAt);
+            Long userId  = res.getLong(12);
+            Long oradorId = res.getLong(13);
+            Orador orador = oradorService.getById(oradorId);
+
+            ticket.setId(_id);
+            ticket.setCodigo(codigo);
+            ticket.setNombre(nombre);
+            ticket.setApellido(apellido);
+            ticket.setEmail(email);
+            ticket.setDni(dni);
+            ticket.setCantidad(cantidad);
+            ticket.setTotal(total);
+            ticket.setCategoria(categoria);
+            ticket.setCreatedAt(createdAt);
+            ticket.setUserId(userId);
+            ticket.setOrador(orador);
         }
         return ticket;
     }
 
     @Override
     public Ticket getByCode(String codigo) throws Exception {
-        String sql = "select * from "+this.tableName+" where codigo =?";
+        String sql = "select * from "+this.tableName+" where codigo =? ORDER BY ID DESC";
 
         //Obtener la Conection
         Connection con = Conexion.getConnection();
@@ -92,31 +190,105 @@ public class TicketService implements TicketRepository {
 
         pst.setString(1, codigo);
 
-        Ticket ticket = null;
+        Ticket ticket = new Ticket();
 
         ResultSet res = pst.executeQuery();
-
-        if(res.next()) {
+        boolean found = res.next();
+        if(found) {
             Long id = res.getLong(1);
             String _codigo = res.getString(2);
             String nombre = res.getString(3);
             String apellido = res.getString(4);
             String email = res.getString(5);
-            Integer cantidad = res.getInt(6);
-            Double total = res.getDouble(7);
-            String categoria = res.getString(8);
-            Timestamp timestamp = res.getTimestamp(9);
+            String dni = res.getString(6);
+            Integer cantidad = res.getInt(7);
+            Double total = res.getDouble(8);
+            String categoria = res.getString(9);
+            Timestamp timestamp = res.getTimestamp(10);
             LocalDateTime createdAt = timestamp.toLocalDateTime();
-            ticket = new Ticket(id, _codigo, nombre, apellido, email, cantidad, total, categoria, createdAt);
+            Long userId  = res.getLong(12);
+            Long oradorId = res.getLong(13);
+            Orador orador = oradorService.getById(oradorId);
+
+
+            ticket.setId(id);
+            ticket.setCodigo(_codigo);
+            ticket.setNombre(nombre);
+            ticket.setApellido(apellido);
+            ticket.setEmail(email);
+            ticket.setDni(dni);
+            ticket.setCantidad(cantidad);
+            ticket.setTotal(total);
+            ticket.setCategoria(categoria);
+            ticket.setCreatedAt(createdAt);
+            ticket.setUserId(userId);
+            ticket.setOradorId(oradorId);
+            ticket.setOrador(orador);
+        }else{
+            ticket = null;
         }
+
+
         return ticket;
     }
 
     @Override
-    public boolean create(Ticket ticket) throws Exception {
+    public ArrayList<Ticket> getByDni(String dni) throws Exception {
+        String sql = "SELECT * FROM "+this.tableName+" where dni=? ORDER BY ID DESC";
+
+        //Obtener la Conection
+        Connection con = Conexion.getConnection();
+
+        //PreparedStatement con mi sql
+        PreparedStatement pst = con.prepareStatement(sql);
+
+        pst.setString(1,dni);
+
+        ArrayList<Ticket> tickets = new ArrayList<>();
+
+
+        ResultSet res = pst.executeQuery();
+
+        while(res.next()){
+            Ticket ticket = new Ticket();
+            Long _id = res.getLong(1);
+            String codigo = res.getString(2);
+            String nombre = res.getString(3);
+            String apellido = res.getString(4);
+            String email = res.getString(5);
+            String _dni = res.getString(6);
+            Integer cantidad = res.getInt(7);
+            Double total = res.getDouble(8);
+            String categoria = res.getString(9);
+            Timestamp timestamp = res.getTimestamp(10);
+            LocalDateTime createdAt = timestamp.toLocalDateTime();
+            Long userId  = res.getLong(12);
+            Long oradorId = res.getLong(13);
+            Orador orador = oradorService.getById(oradorId);
+
+            ticket.setId(_id);
+            ticket.setCodigo(codigo);
+            ticket.setNombre(nombre);
+            ticket.setApellido(apellido);
+            ticket.setEmail(email);
+            ticket.setDni(_dni);
+            ticket.setCantidad(cantidad);
+            ticket.setTotal(total);
+            ticket.setCategoria(categoria);
+            ticket.setCreatedAt(createdAt);
+            ticket.setUserId(userId);
+            ticket.setOrador(orador);
+
+            tickets.add(ticket);
+        }
+        return tickets;
+    }
+
+    @Override
+    public boolean create(TicketDto ticket) throws Exception {
         String sql = "INSERT INTO "+this.tableName+ " ";
-        sql += " (codigo, nombre, apellido, email, cantidad, total, categoria, created_at)";
-        sql += " values (?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP) ";
+        sql += " (codigo, nombre, apellido, email, dni, cantidad, total, categoria, created_at, user_id, orador_id)";
+        sql += " values (?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, ?, ?) ";
 
         //Obtener la Conection
         Connection con = Conexion.getConnection();
@@ -128,9 +300,12 @@ public class TicketService implements TicketRepository {
         pst.setString(2, ticket.getNombre());
         pst.setString(3, ticket.getApellido());
         pst.setString(4, ticket.getEmail());
-        pst.setInt(5, ticket.getCantidad());
-        pst.setDouble(6, ticket.getTotal());
-        pst.setString(7, ticket.getCategoria());
+        pst.setString(5, ticket.getDni());
+        pst.setInt(6, ticket.getCantidad());
+        pst.setDouble(7, ticket.getTotal());
+        pst.setString(8, ticket.getCategoria());
+        pst.setLong(9, ticket.getUserId());
+        pst.setLong(10, ticket.getOradorId());
 
         int result = pst.executeUpdate();
 
@@ -142,9 +317,9 @@ public class TicketService implements TicketRepository {
     }
 
     @Override
-    public boolean update(Long id, Ticket ticket) throws Exception {
+    public boolean update(Long id, TicketDto ticket) throws Exception {
         String sql = "UPDATE "+this.tableName+ " ";
-        sql += " SET nombre=?, apellido=?, email=?, cantidad=?, total=?, categoria=?, ";
+        sql += " SET nombre=?, apellido=?, email=?, dni=?, cantidad=?, total=?, categoria=?, ";
         sql += " updated_at=CURRENT_TIMESTAMP WHERE id = ? ";
 
         //Obtener la Conection
@@ -157,10 +332,11 @@ public class TicketService implements TicketRepository {
         pst.setString(1, ticket.getNombre());
         pst.setString(2, ticket.getApellido());
         pst.setString(3, ticket.getEmail());
-        pst.setInt(4, ticket.getCantidad());
-        pst.setDouble(5, ticket.getTotal());
-        pst.setString(6, ticket.getCategoria());
-        pst.setLong(7, id);
+        pst.setString(4, ticket.getDni());
+        pst.setInt(5, ticket.getCantidad());
+        pst.setDouble(6, ticket.getTotal());
+        pst.setString(7, ticket.getCategoria());
+        pst.setLong(8, id);
 
         int result = pst.executeUpdate();
 

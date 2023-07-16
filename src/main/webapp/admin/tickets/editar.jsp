@@ -3,6 +3,10 @@
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.time.LocalDateTime"%>
 <%
+    if(session.getAttribute("rol").equals("user")){
+        response.sendRedirect("/");
+    }
+    
     if (session.getAttribute("id") == null) {
         response.sendRedirect("/iniciarsesion");
     }
@@ -87,6 +91,10 @@
                                     <li class="nav-item">
                                         <a class="dropdown-item d-flex align-items-center" href="/admin/usuarios">Usuarios</a>
                                     </li>
+                                    
+                                    <li class="nav-item">
+                                        <a class="dropdown-item d-flex align-items-center" href="/tickets">Mis tickets</a>
+                                    </li>
 
                                     <li class="nav-item">
                                         <a class="dropdown-item d-flex align-items-center" href="/cerrarsesion">Cerrar sesion</a>
@@ -168,6 +176,14 @@
                         <label for="floatingInput">Correo Electrónico</label>
                         <div class="invalid-feedback">
                             Por favor, ingrese su correo electornico
+                        </div>
+                    </div>
+                        
+                        <div class="form-floating mb-3">
+                        <input type="number" class="form-control" required id="dni" name="dni" placeholder="Dni" autocomplete="off" value="<%= request.getAttribute("dni") != null ? request.getAttribute("dni") : ticket.getDni()%>">
+                        <label for="floatingInput">Dni</label>
+                        <div class="invalid-feedback">
+                            Por favor, ingrese su dni
                         </div>
                     </div>
 

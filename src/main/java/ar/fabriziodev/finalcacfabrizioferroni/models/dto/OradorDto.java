@@ -1,8 +1,9 @@
-package ar.fabriziodev.finalcacfabrizioferroni.models;
+package ar.fabriziodev.finalcacfabrizioferroni.models.dto;
 
 import java.time.LocalDateTime;
 
-public class Orador {
+public class OradorDto {
+
     protected Long id;
 
     protected  String codigo;
@@ -13,16 +14,16 @@ public class Orador {
 
     protected String tema;
 
-    protected String descripcion;
+    protected  String descripcion;
 
     protected LocalDateTime createdAt;
 
     protected LocalDateTime updatedAt;
 
-    public Orador() {
+    public OradorDto() {
     }
 
-    public Orador(Long id, String codigo, String nombre, String apellido, String tema, String descripcion, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public OradorDto(Long id, String codigo, String nombre, String apellido, String tema, String descripcion, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.codigo = codigo;
         this.nombre = nombre;
@@ -96,20 +97,5 @@ public class Orador {
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
-
-    public String toFullName() {
-        return nombre + " " + apellido + " - " + tema;
-    }
-    @Override
-    public String toString() {
-        return "{" +
-                "id=" + id +
-                ", codigo=" + codigo +
-                ", nombre=" + nombre +
-                ", apellido=" + apellido +
-                ", tema=" + tema +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                '}';
-    }
 }
+

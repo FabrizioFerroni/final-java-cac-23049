@@ -1,14 +1,16 @@
 <%
     String status = (String) session.getAttribute("status");
     String msg = (String) session.getAttribute("msg");
-    String nombre2 = (String) session.getAttribute("nombre2");    
+    String nombre2 = (String) session.getAttribute("nombre2");
     String apellido2 = (String) session.getAttribute("apellido2");
     String tema = (String) session.getAttribute("tema");
+    String detalle = (String) session.getAttribute("descripcion");
 
     String nombre3 = (String) session.getAttribute("nombre3");
-        String apellido3 = (String) session.getAttribute("apellido3");
-        String tema2 = (String) session.getAttribute("tema2");
+    String apellido3 = (String) session.getAttribute("apellido3");
+    String tema2 = (String) session.getAttribute("tema2");
     String codigo = (String) session.getAttribute("codigo");
+    String detalle2 = (String) session.getAttribute("descripcion2");
 
 %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -50,6 +52,7 @@
     <!-- Fin Iconos -->
 
     <!-- Menú -->
+
     <header>
         <nav class="navbar navbar-expand-lg nav__back navbar-dark  mx-auto">
             <div class="container-fluid">
@@ -74,17 +77,22 @@
                         <li class="nav-item">
                             <a class="nav-link fs-5" href="#convertite-en-orador">Conviértete en orador</a>
                         </li>
+                        <%                            if (session.getAttribute("id") != null) {
+                        %>
+
                         <li class="nav-item">
-                            <a class="nav-link nav__text fs-5" href="comprar/ticket">Comprar tickets</a>
+                            <a class="nav-link nav__text fs-5 " href="/comprar/ticket">Comprar tickets</a>
                         </li>
+                        <% } %>
                         <li class="nav-item">
-                            <a class="nav-link  fs-5" href="/buscar">Buscar ticket</a>
+                            <a class="nav-link fs-5" href="/buscar">Buscar ticket</a>
                         </li>
                         <%
+
                             if (session.getAttribute("id") == null) {
                         %>
                         <li class="nav-item">
-                            <a class="nav-link fs-5" href="/iniciarsesion">Iniciar sesion </a>
+                            <a class="nav-link fs-5" href="/iniciarsesion">Iniciar sesion / Registrarse</a>
                         </li>
                         <% } else {%>
                         <ul class="navbar-nav mb-2 mb-lg-0">
@@ -94,11 +102,14 @@
                                     <span class="fs-5" id="bd-theme-text">Hola: <span class="text-success"><%= session.getAttribute("nombre")%></span></span>
                                 </button>
                                 <ul class="dropdown-menu dropdown-menu-start">
+                                    <%
+                                        if (session.getAttribute("rol").equals("admin")) {
+                                    %> 
                                     <li class="nav-item">
                                         <a class="dropdown-item d-flex align-items-center" href="/admin/tablero">Tablero</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="dropdown-item d-flex align-items-center " href="/admin/operadores">Oradores</a>
+                                        <a class="dropdown-item d-flex align-items-center " href="/admin/oradores">Oradores</a>
                                     </li><!-- comment -->
 
                                     <li class="nav-item">
@@ -108,7 +119,10 @@
                                     <li class="nav-item">
                                         <a class="dropdown-item d-flex align-items-center " href="/admin/usuarios">Usuarios</a>
                                     </li>
-
+                                    <% } %>
+                                    <li class="nav-item">
+                                        <a class="dropdown-item d-flex align-items-center" href="/tickets">Mis tickets</a>
+                                    </li>
 
                                     <li class="nav-item">
                                         <a class="dropdown-item d-flex align-items-center" href="/cerrarsesion">Cerrar sesion</a>
@@ -276,10 +290,11 @@
                 <div class="container mt-3 mb-5">
                     <input type="hidden" name="status" id="status" value="<%= status%>">                
                     <input type="hidden" name="msg" id="msg" value="<%= msg%>">
-                    <input type="hidden" name="nombre2" id="nombre2" value="<%= nombre3 %>">
-                    <input type="hidden" name="apellido2" id="apellido2" value="<%= apellido3 %>">
-                    <input type="hidden" name="tema2" id="tema2" value="<%= tema2 %>">
-                    <input type="hidden" name="codigo" id="codigo" value="<%= codigo %>">
+                    <input type="hidden" name="nombre2" id="nombre2" value="<%= nombre3%>">
+                    <input type="hidden" name="apellido2" id="apellido2" value="<%= apellido3%>">
+                    <input type="hidden" name="tema2" id="tema2" value="<%= tema2%>">
+                    <input type="hidden" name="codigo" id="codigo" value="<%= codigo%>">
+                    <input type="hidden" name="descripcion2" id="detalle" value="<%= detalle2%>">
 
                     <form id="form" class="needs-validation convertite__info--form" method="post" action="index" novalidate>
                         <div class="row">
@@ -305,12 +320,27 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-floating mb-3">
-                                    <textarea class="form-control convertite__info--textarea" name="tema" id="mensaje" cols="30" rows="10" required placeholder="Sobre que quieres hablar?" height="30px"><%= tema != null ? tema : ""%></textarea>
-                                    <label for="floatingInput">Sobre que quieres hablar?</label>
+                                    <input onkeyup="countChars(85, this);"  type="text" class="form-control" id="tema" name="tema" required placeholder="Ingresa el tema" value="<%= tema != null ? tema : ""%>">
+                                    <label  for="floatingInput">Tema sobre que quieres hablar?</label>
                                     <div class="invalid-feedback">
                                         Por favor, ingrese su tema de lo que va a hablar
                                     </div>
-                                    <span class="text-muted convertite__info-left d-flex pt-1">Recuerda incluir un título para tu charla</span>
+                                    <div class="d-flex justify-content-between">
+                                        <span class="text-muted convertite__info-left d-flex pt-1">Recuerda incluir un título para tu charla</span>
+                                        <span id="charNum" class="text-muted convertite__info-left d-flex pt-1 text-end"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-floating mb-3">
+                                    <textarea  class="form-control convertite__info--textarea" name="descripcion" id="descripcion" cols="30" rows="10" required placeholder="Detalla sobre que quieres hablar?" height="30px"><%= detalle != null ? detalle : ""%></textarea>
+                                    <label for="floatingInput">Detalle sobre lo que quieres hablar?</label>
+                                    <div class="invalid-feedback">
+                                        Por favor, ingrese el detalle del tema de lo que va a hablar
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -375,8 +405,8 @@
         session.removeAttribute("tema");
 
         session.removeAttribute("nombre3");
-                session.removeAttribute("apellido3");
-                session.removeAttribute("tema2");
+        session.removeAttribute("apellido3");
+        session.removeAttribute("tema2");
         session.removeAttribute("codigo");
     %>
 

@@ -2,6 +2,7 @@ package ar.fabriziodev.finalcacfabrizioferroni.services;
 
 import ar.fabriziodev.finalcacfabrizioferroni.data.Conexion;
 import ar.fabriziodev.finalcacfabrizioferroni.models.Usuario;
+import ar.fabriziodev.finalcacfabrizioferroni.models.dto.UsuarioDto;
 import ar.fabriziodev.finalcacfabrizioferroni.repository.UserRepository;
 
 import java.sql.*;
@@ -18,34 +19,45 @@ public class UserService implements UserRepository {
     }
     @Override
     public ArrayList<Usuario> findAll() throws Exception {
-        String sql = "SELECT * FROM "+this.tableName+"";
+        String sql = "SELECT * FROM "+this.tableName+" ORDER BY ID DESC";
+
         //Obtener la Conection
         Connection con = Conexion.getConnection();
-
-
 
         //PreparedStatement con mi sql
         PreparedStatement pst = con.prepareStatement(sql);
 
-        ArrayList<Usuario> user = new ArrayList<>();
+        ArrayList<Usuario> users = new ArrayList<>();
 
         ResultSet res = pst.executeQuery();
 
         while(res.next()){
+            Usuario user = new Usuario();
             Long id = res.getLong(1);
             String nombre = res.getString(2);
             String apellido = res.getString(3);
             String username_bd = res.getString(4);
-            Timestamp timestamp = res.getTimestamp(6);
+            String email = res.getString(5);
+            String rol = res.getString(7);
+            Timestamp timestamp = res.getTimestamp(8);
             LocalDateTime createdAt = timestamp.toLocalDateTime();
-            user.add(new Usuario(id, nombre, apellido, username_bd, createdAt));
+
+            user.setId(id);
+            user.setNombre(nombre);;
+            user.setApellido(apellido);
+            user.setEmail(email);
+            user.setUsername(username_bd);
+            user.setRol(rol);
+            user.setCreatedAt(createdAt);
+
+            users.add(user);
         }
-        return user;
+        return users;
     }
 
     @Override
     public Usuario getById(Long id) throws Exception {
-        String sql = "select * from "+this.tableName+" where id =?";
+        String sql = "select * from "+this.tableName+" where id =? ORDER BY ID DESC";
 
         //Obtener la Conection
         Connection con = Conexion.getConnection();
@@ -55,7 +67,7 @@ public class UserService implements UserRepository {
 
         pst.setLong(1,id);
 
-        Usuario usuario = null;
+        Usuario user = new Usuario();
 
         ResultSet res = pst.executeQuery();
 
@@ -64,17 +76,25 @@ public class UserService implements UserRepository {
             String nombre = res.getString(2);
             String apellido = res.getString(3);
             String username = res.getString(4);
-            Timestamp timestamp = res.getTimestamp(6);
+            String email = res.getString(5);
+            String rol = res.getString(7);
+            Timestamp timestamp = res.getTimestamp(8);
             LocalDateTime createdAt = timestamp.toLocalDateTime();
 
-            usuario = new Usuario(_id, nombre, apellido, username, createdAt);
+            user.setId(_id);
+            user.setNombre(nombre);
+            user.setApellido(apellido);
+            user.setEmail(email);
+            user.setUsername(username);
+            user.setRol(rol);
+            user.setCreatedAt(createdAt);
         }
-        return usuario;
+        return user;
     }
 
     @Override
-    public boolean update(Long id, Usuario usuario) throws Exception {
-        String sql = "UPDATE "+this.tableName+" SET nombre=?,apellido=?,username=?,updated_at=CURRENT_TIMESTAMP WHERE id = ?";
+    public boolean update(Long id, UsuarioDto usuario) throws Exception {
+        String sql = "UPDATE "+this.tableName+" SET nombre=?,apellido=?,email=?, username=?, rol=?, updated_at=CURRENT_TIMESTAMP WHERE id = ?";
 
         Connection con = Conexion.getConnection();
 
@@ -82,8 +102,10 @@ public class UserService implements UserRepository {
 
         pst.setString(1, usuario.getNombre());
         pst.setString(2, usuario.getApellido());
-        pst.setString(3, usuario.getUsername());
-        pst.setLong(4, id);
+        pst.setString(3, usuario.getEmail());
+        pst.setString(4, usuario.getUsername());
+        pst.setString(5, usuario.getRol());
+        pst.setLong(6, id);
 
         int result = pst.executeUpdate();
 

@@ -2,6 +2,7 @@ package ar.fabriziodev.finalcacfabrizioferroni.services;
 
 import ar.fabriziodev.finalcacfabrizioferroni.data.Conexion;
 import ar.fabriziodev.finalcacfabrizioferroni.models.Usuario;
+import ar.fabriziodev.finalcacfabrizioferroni.models.dto.UsuarioDto;
 import ar.fabriziodev.finalcacfabrizioferroni.repository.AuthRepository;
 
 import java.sql.Connection;
@@ -21,21 +22,24 @@ public class AuthService implements AuthRepository {
     }
 
     @Override
-    public boolean register(Usuario usuario) throws Exception {
+    public boolean register(UsuarioDto usuario) throws Exception {
         String sql = "insert into "+this.tableName;
-        sql += " (nombre,apellido,username,password,created_at) ";
-        sql += "values (?,?,?,?,CURRENT_TIMESTAMP) ";
+        sql += " (nombre,apellido,email,username,password,rol,created_at) ";
+        sql += "values (?,?,?,?,?,?,CURRENT_TIMESTAMP) ";
 
         //Obtener la Conection
         Connection con = Conexion.getConnection();
 
         //PreparedStatement con mi sql
         PreparedStatement pst = con.prepareStatement(sql);
+
         //sql injection!
         pst.setString(1, usuario.getNombre());
         pst.setString(2,usuario.getApellido());
-        pst.setString(3,usuario.getUsername());
-        pst.setString(4,usuario.getPassword());
+        pst.setString(3,usuario.getEmail());
+        pst.setString(4,usuario.getUsername());
+        pst.setString(5,usuario.getPassword());
+        pst.setString(6, usuario.getRol());
 
         int result = pst.executeUpdate();
 
@@ -62,14 +66,25 @@ public class AuthService implements AuthRepository {
 
         if(res.next()){
             //Hay q chequear el password introducido
-            String password_bd = res.getString(5);
+            String password_bd = res.getString(6);
             boolean checkPass = BCrypt.checkpw(password, password_bd);
             if(checkPass){
                 Long id = res.getLong(1);
                 String nombre = res.getString(2);
                 String apellido = res.getString(3);
+                String email = res.getString(5);
                 String username_bd = res.getString(4);
-                Usuario user = new Usuario(id, nombre, apellido, username_bd);
+                String rol = res.getString(7);
+
+                Usuario user = new Usuario();
+
+                user.setId(id);
+                user.setNombre(nombre);;
+                user.setApellido(apellido);
+                user.setEmail(email);
+                user.setUsername(username_bd);
+                user.setRol(rol);
+
                 return user;
 //                return user.toString();
             }else{
@@ -77,14 +92,5 @@ public class AuthService implements AuthRepository {
             }
         }
         return "No hemos podido encontrar un usuario con los datos ingresados";
-    }
-
-
-    private Date dateFrom(LocalDateTime ldt) {
-        java.util.Date date = Date.from(ldt.toLocalDate().atStartOfDay(ZoneId.systemDefault()).toInstant());
-        return new java.sql.Date(date.getTime());
-
-        //Calendar
-        //Gregorian Calendar
     }
 }

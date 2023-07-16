@@ -1,6 +1,7 @@
 package ar.fabriziodev.finalcacfabrizioferroni.servlets.oradores;
 
 import ar.fabriziodev.finalcacfabrizioferroni.models.Orador;
+import ar.fabriziodev.finalcacfabrizioferroni.models.dto.OradorDto;
 import ar.fabriziodev.finalcacfabrizioferroni.repository.OradorRepository;
 import ar.fabriziodev.finalcacfabrizioferroni.services.OradorService;
 import jakarta.servlet.ServletException;
@@ -33,21 +34,28 @@ public class EditOradorServlet extends HttpServlet {
         String nombre = req.getParameter("nombre");
         String apellido = req.getParameter("apellido");
         String tema = req.getParameter("tema");
+        String descripcion = req.getParameter("descripcion");
         String id = req.getPathInfo().substring(1);
 
-        if (nombre == "" || apellido == "" || tema == "") {
+        if (nombre == "" || apellido == "" || tema == "" || descripcion == "")  {
             req.setAttribute("status", "warning");
             req.setAttribute("msg", "Todos los campos son requeridos");
             req.setAttribute("nombre", nombre);
             req.setAttribute("apellido", apellido);
             req.setAttribute("tema", tema);
+            req.setAttribute("descripcion", descripcion);
             getServletContext().getRequestDispatcher("/admin/oradores/editar.jsp").forward(req, resp);
         }
 
         nombre = toNomProp(nombre);
         apellido = toNomProp(apellido);
+        tema = truncateText(tema);
+        OradorDto orador = new OradorDto();
 
-        Orador orador = new Orador(Long.parseLong(id), nombre, apellido, tema);
+        orador.setNombre(nombre);
+        orador.setApellido(apellido);
+        orador.setTema(tema);
+        orador.setDescripcion(descripcion);
 
         OradorRepository repo = new OradorService();
         HttpSession session = req.getSession();
@@ -64,6 +72,7 @@ public class EditOradorServlet extends HttpServlet {
                 req.setAttribute("nombre", nombre);
                 req.setAttribute("apellido", apellido);
                 req.setAttribute("tema", tema);
+                req.setAttribute("descripcion", descripcion);
                 getServletContext().getRequestDispatcher("/admin/oradores/editar.jsp").forward(req, resp);
             }
         } catch (Exception ex) {
@@ -72,10 +81,20 @@ public class EditOradorServlet extends HttpServlet {
             req.setAttribute("nombre", nombre);
             req.setAttribute("apellido", apellido);
             req.setAttribute("tema", tema);
+            req.setAttribute("descripcion", descripcion);
             getServletContext().getRequestDispatcher("/admin/oradores/editar.jsp").forward(req, resp);
             System.out.println(ex.getMessage());
         }
     }
+
+    public String truncateText(String text) {
+        if (text.length() > 85) {
+            return text.substring(0, 82) + "...";
+        } else {
+            return text;
+        }
+    }
+
 
     public static String toNomProp(String element) {
         StringBuilder result = new StringBuilder();

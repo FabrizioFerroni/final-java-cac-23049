@@ -6,6 +6,8 @@ let Nombre = getByID('nombre');
 let Apellido = getByID('apellido');
 const Email = getByID('correo');
 const Cantidad = getByID('cantidad');
+const Dni = getByID('dni');
+const OradorId = getByID('orador_id');
 const Categoria = getByID('categoria');
 const totalSpan = getByID('total');
 const totalInput = getByID('total_input');
@@ -20,6 +22,9 @@ let codigo2 = document.getElementById("codigo2").value;
 let cantidad2 = document.getElementById("cantidad2").value;
 let total2 = document.getElementById("total2").value;
 let categoria2 = document.getElementById("categoria2").value;
+let nombre3 = document.getElementById('nombre3').value;
+let apellido3 = document.getElementById('apellido3').value;
+let email3 = document.getElementById('email3').value;
 
 
 
@@ -90,11 +95,13 @@ function sendForm(e) {
     let nombre = Nombre.value;
     let apellido = Apellido.value;
     const email = Email.value;
+    const dni = Dni.value;
+    const orador_id = OradorId.value;
     const cantidad = Cantidad.value;
     const categoria = Categoria.value;
     const descuento = valorTicketDesc;
 
-    if (nombre !== '' && apellido !== '' && cantidad !== '' && categoria !== '' && email !== '') {
+    if (nombre !== '' && apellido !== '' && cantidad !== '' && categoria !== '' && email !== '' && dni !== '' && orador_id !== '') {
         // Permitir el envío del formulario
         e.currentTarget.submit();
     } else {
@@ -122,9 +129,9 @@ function sendForm(e) {
 
 // Limpiar form
 function borrar() {
-    Nombre.value = '';
-    Apellido.value = '';
-    Email.value = '';
+    Nombre.value = nombre3;
+    Apellido.value = apellido3;
+    Email.value = email3;
     Cantidad.value = '';
     const anterior = document.querySelector('.active');
     if (anterior) anterior.classList.remove('active');
@@ -180,10 +187,15 @@ if (status == "success") {
             showCancelButton: false,
             confirmButtonColor: '#157347',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Aceptar',
+            confirmButtonText: 'Ir a ver el ticket',
             customClass: {
                 cancelButton: 'outnone',
                 confirmButton: 'outnone',
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                let url = window.location.origin;
+                window.location.href = `${url}/ticket/${codigo2}`;
             }
         });
 }

@@ -1,12 +1,9 @@
 package ar.fabriziodev.finalcacfabrizioferroni.servlets.tickets;
 
 import ar.fabriziodev.finalcacfabrizioferroni.models.Ticket;
-import ar.fabriziodev.finalcacfabrizioferroni.models.Usuario;
+import ar.fabriziodev.finalcacfabrizioferroni.models.dto.TicketDto;
 import ar.fabriziodev.finalcacfabrizioferroni.repository.TicketRepository;
-import ar.fabriziodev.finalcacfabrizioferroni.repository.UserRepository;
 import ar.fabriziodev.finalcacfabrizioferroni.services.TicketService;
-import ar.fabriziodev.finalcacfabrizioferroni.services.UserService;
-import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -39,11 +36,11 @@ public class EditTicketServlet extends HttpServlet {
         String nombre = req.getParameter("nombre");
         String apellido = req.getParameter("apellido");
         String email = req.getParameter("email");
+        String dni = req.getParameter("dni");
         Integer cantidad = Integer.valueOf(req.getParameter("cantidad"));
         Double total = Double.valueOf(req.getParameter("total"));
         String categoria = req.getParameter("categoria");
         String id = req.getPathInfo().substring(1);
-//
 
         if (nombre == "" || apellido == "" || email == "" || categoria == "" || cantidad.equals(0) || total.equals(0)) {
             req.setAttribute("status", "warning");
@@ -60,9 +57,15 @@ public class EditTicketServlet extends HttpServlet {
         nombre = toNomProp(nombre);
         apellido = toNomProp(apellido);
 
-        Ticket edit_ticket = new Ticket(Long.parseLong(id), nombre, apellido, email, cantidad, total, categoria);
+        TicketDto edit_ticket = new TicketDto();
 
-        System.out.println("Datos de ticket editado: " + edit_ticket);
+        edit_ticket.setNombre(nombre);
+        edit_ticket.setApellido(apellido);
+        edit_ticket.setEmail(email);
+        edit_ticket.setDni(dni);
+        edit_ticket.setCantidad(cantidad);
+        edit_ticket.setTotal(total);
+        edit_ticket.setCategoria(categoria);
 
         TicketRepository repo = new TicketService();
         HttpSession session = req.getSession();
@@ -79,6 +82,7 @@ public class EditTicketServlet extends HttpServlet {
                 req.setAttribute("nombre", nombre);
                 req.setAttribute("apellido", apellido);
                 req.setAttribute("email", email);
+                req.setAttribute("dni", dni);
                 req.setAttribute("cantidad", cantidad);
                 req.setAttribute("total", total);
                 req.setAttribute("categoria", categoria);
@@ -90,6 +94,7 @@ public class EditTicketServlet extends HttpServlet {
             req.setAttribute("nombre", nombre);
             req.setAttribute("apellido", apellido);
             req.setAttribute("email", email);
+            req.setAttribute("dni", dni);
             req.setAttribute("cantidad", cantidad);
             req.setAttribute("total", total);
             req.setAttribute("categoria", categoria);

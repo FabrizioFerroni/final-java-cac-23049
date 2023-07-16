@@ -6,6 +6,11 @@
     if (session.getAttribute("id") == null) {
         response.sendRedirect("/iniciarsesion");
     }
+
+    if (session.getAttribute("rol").equals("user")) {
+        response.sendRedirect("/");
+    }
+
     String status = (String) session.getAttribute("status");
     String msg = (String) session.getAttribute("msg");
 %>
@@ -89,6 +94,10 @@
                                     </li>
 
                                     <li class="nav-item">
+                                        <a class="dropdown-item d-flex align-items-center" href="/tickets">Mis tickets</a>
+                                    </li>
+
+                                    <li class="nav-item">
                                         <a class="dropdown-item d-flex align-items-center" href="/cerrarsesion">Cerrar sesion</a>
                                     </li>
                                 </ul>
@@ -141,7 +150,7 @@
 
     <div class="d-flex justify-content-center align-items-center">
         <div class="card-login p-5 border-1">
-        <input type="hidden" name="status" id="status" value="<%= status%>">
+            <input type="hidden" name="status" id="status" value="<%= status%>">
             <input type="hidden" name="msg" id="msg" value="<%= msg%>">
             <div class="d-flex justify-content-center flex-column align-items-center pb-3 ">
                 <span class="fs-4 text-muted">Editar usuario</span>
@@ -151,7 +160,7 @@
 
                 <form class="needs-validation mb-2" novalidate method="post" action="/admin/usuario/editar/<%=user.getId()%>"> <%--convertite__info--form--%>
                     <div class="form-floating mb-3">
-                        <input type="text" class="form-control" required id="nombre" name="nombre" placeholder="Nombre" autocomplete="off" value="<%= request.getAttribute("nombre") != null ? request.getAttribute("nombre") :  user.getNombre() %>">
+                        <input type="text" class="form-control" required id="nombre" name="nombre" placeholder="Nombre" autocomplete="off" value="<%= request.getAttribute("nombre") != null ? request.getAttribute("nombre") : user.getNombre()%>">
                         <label for="floatingInput">Nombre</label>
                         <div class="invalid-feedback">
                             Por favor, ingrese su nombre
@@ -171,13 +180,34 @@
                             Por favor, ingrese su nombre de usuario
                         </div>
                     </div>
-                   
+
+                    <div class="form-floating mb-3">
+                        <input type="email" class="form-control" required id="email" name="email" placeholder="Correo electronico" autocomplete="off" value="<%= request.getAttribute("email") != null ? request.getAttribute("email") : user.getEmail()%>">
+                        <label for="floatingInput">Correo Electrónico</label>
+                        <div class="invalid-feedback">
+                            Por favor, ingrese su correo electronico
+                        </div>
+                    </div>
+                        
+                         <div class="form-floating mb-3">
+                        <select name="rol" id="rol"  class="form-select" required placeholder="Rol" autocomplete="off" >
+                            <option readonly disabled value="">Seleccione una Categoria</option>
+                            <option value="admin" <% if (request.getAttribute("rol") != null && request.getAttribute("rol").equals("admin") || user.getRol() != null && user.getRol().equals("admin")) { %>selected<% } %>>Administrador</option>
+                            <option value="user" <% if (request.getAttribute("rol") != null && request.getAttribute("rol").equals("user") || user.getRol() != null && user.getRol().equals("user")) { %>selected<% } %>>Usuario</option>
+                            
+                        </select>
+                        <label for="floatingInput">Rol</label>
+                        <div class="invalid-feedback">
+                            Por favor, ingrese el rol del usuario
+                        </div>
+                    </div>
+
                     <div class="d-block mt-3">
                         <button class="btn btn-success btn-lg w-100" type="submit" name="action" value="editar">Editar usuario</button>
-                        
+
                     </div>
                 </form>
-                        <a href="/admin/usuarios" class="text-decoration-none">Volver</a>
+                <a href="/admin/usuarios" class="text-decoration-none">Volver</a>
             </div>
         </div>
     </div>

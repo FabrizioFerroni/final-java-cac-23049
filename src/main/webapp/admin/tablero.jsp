@@ -1,4 +1,7 @@
 <%
+    if (session.getAttribute("rol").equals("user")) {
+        response.sendRedirect("/");
+    }
     if (session.getAttribute("id") == null) {
         response.sendRedirect("/iniciarsesion");
     }
@@ -57,34 +60,38 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto">
                         <ul class="navbar-nav mb-2 mb-lg-0">
-                        <li class="nav-item dropdown">
-                            <button class="btn btn-link nav-link py-2 px-0 px-lg-2 dropdown-toggle d-flex align-items-center" id="username" type="button" aria-expanded="false" data-bs-toggle="dropdown" data-bs-display="static" aria-label="Toggle profile options">
-                                
-                                <span class="fs-5" id="bd-theme-text">Hola: <span class="text-success"><%= session.getAttribute("nombre") %></span></span>
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-start">
-                                <li class="nav-item">
-                                    <a class="dropdown-item d-flex align-items-center active" href="/admin/tablero">Tablero</a>
-                                </li>
-                                
-                                <li class="nav-item">
-                                    <a class="dropdown-item d-flex align-items-center " href="/admin/oradores">Oradores</a>
-                                </li><!-- comment -->
-                                
-                                <li class="nav-item">
-                                    <a class="dropdown-item d-flex align-items-center " href="/admin/tickets">Tickets</a>
-                                </li>
-                                
-                                <li class="nav-item">
-                                    <a class="dropdown-item d-flex align-items-center " href="/admin/usuarios">Usuarios</a>
-                                </li>
-                                
-                                <li class="nav-item">
-                                    <a class="dropdown-item d-flex align-items-center" href="/cerrarsesion">Cerrar sesion</a>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
+                            <li class="nav-item dropdown">
+                                <button class="btn btn-link nav-link py-2 px-0 px-lg-2 dropdown-toggle d-flex align-items-center" id="username" type="button" aria-expanded="false" data-bs-toggle="dropdown" data-bs-display="static" aria-label="Toggle profile options">
+
+                                    <span class="fs-5" id="bd-theme-text">Hola: <span class="text-success"><%= session.getAttribute("nombre")%></span></span>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-start">
+                                    <li class="nav-item">
+                                        <a class="dropdown-item d-flex align-items-center active" href="/admin/tablero">Tablero</a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a class="dropdown-item d-flex align-items-center " href="/admin/oradores">Oradores</a>
+                                    </li><!-- comment -->
+
+                                    <li class="nav-item">
+                                        <a class="dropdown-item d-flex align-items-center " href="/admin/tickets">Tickets</a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a class="dropdown-item d-flex align-items-center " href="/admin/usuarios">Usuarios</a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a class="dropdown-item d-flex align-items-center" href="/tickets">Mis tickets</a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a class="dropdown-item d-flex align-items-center" href="/cerrarsesion">Cerrar sesion</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
                     </ul>
                     <ul class="navbar-nav mb-2 mb-lg-0">
                         <li class="nav-item dropdown">
@@ -122,22 +129,67 @@
         </nav>
     </header>
     <!-- Fin Menú -->
-        <input type="hidden" name="status" id="status" value="<%= status%>">                
-        <input type="hidden" name="msg" id="msg" value="<%= msg%>">
+    <input type="hidden" name="status" id="status" value="<%= status%>">                
+    <input type="hidden" name="msg" id="msg" value="<%= msg%>">
 
 
-        <!-- Scripts -->
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
-        <script src="../assets/js/validation.js"></script>
-        <script src="../assets/js/form.js"></script>
-        <script src="../assets/js/icon-menu.js"></script>
-        <script src="../assets/js/darkMode.js"></script>
-        <script src="../assets/js/alert.js"></script>
+    <main class="pt-3 w-100">
+        <div class="m-auto">
+            <div class="comprar-ticket">
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class=" d-flex justify-content-center align-items-center">
+                            <ul class="m-0 p-0 g-0 gap-4 justify-content-between mb-2 mt-2 operadores__info--cards">
+                                <a href="/admin/oradores"  class="text-decoration-none card operadores__info--card estudiante__card text-center border-primary rounded-0 cursor-pointer" onmouseleave="changeTotal()">
+                                    <div class="card-body d-flex justify-content-center align-items-center">
+                                        <div class="d-flex flex-column justify-content-center align-items-center">
+                                            <h5 class="card-title pb-10">Oradores</h5>
+                                            <h2 class="pb-10"><%= request.getAttribute("c_oradores")%></h2>
 
-        <%
-            session.removeAttribute("status");
-            session.removeAttribute("msg");
-        %>
-    </body>
+                                        </div>
+                                        <i class="fas fa-user-graduate fs-1"></i>
+                                    </div>
+                                </a>
+                                <a href="/admin/tickets"  class="text-decoration-none flex-row card operadores__info--card text-center trainee__card border-info rounded-0 cursor-pointer" onmouseleave="changeTotal()">
+                                    <div class="card-body d-flex justify-content-center align-items-center">
+                                        <div class="d-flex flex-column justify-content-center align-items-center">
+                                            <h5 class="card-title pb-10">Tickets</h5>
+                                            <h2 class="pb-10"><%= request.getAttribute("c_tickets")%></h2>                                        
+                                        </div>
+                                        <i class="fas fa-ticket-alt fs-1"></i>
+                                    </div>
+
+                                </a>
+                                <a href="/admin/usuarios"  class="text-decoration-none card operadores__info--card text-center junior__card border-warning rounded-0 cursor-pointer" onmouseleave="changeTotal()">
+                                    <div class="card-body d-flex justify-content-center align-items-center">
+                                        <div class="d-flex flex-column justify-content-center align-items-center">
+                                            <h5 class="card-title pb-10">Usuarios</h5>
+                                            <h2 class="pb-10"><%= request.getAttribute("c_user")%></h2>
+
+                                        </div>
+                                        <i class="fas fa-users fs-1"></i>
+                                    </div>
+                                </a>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
+    <script src="../assets/js/validation.js"></script>
+    <script src="../assets/js/icon-menu.js"></script>
+    <script src="../assets/js/darkMode.js"></script>
+    <script src="../assets/js/alert.js"></script>
+
+    <%
+        session.removeAttribute("status");
+        session.removeAttribute("msg");
+    %>
+</body>
 </html>

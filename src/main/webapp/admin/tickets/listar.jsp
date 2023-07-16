@@ -7,6 +7,9 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="ar.fabriziodev.finalcacfabrizioferroni.models.Ticket" %>
 <%
+    if (session.getAttribute("rol").equals("user")) {
+        response.sendRedirect("/");
+    }
     if (session.getAttribute("id") == null) {
         response.sendRedirect("/iniciarsesion");
     }
@@ -87,6 +90,10 @@
 
                                     <li class="nav-item">
                                         <a class="dropdown-item d-flex align-items-center" href="/admin/usuarios">Usuarios</a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a class="dropdown-item d-flex align-items-center" href="/tickets">Mis tickets</a>
                                     </li>
 
                                     <li class="nav-item">
@@ -177,8 +184,7 @@
 
                         // Crea un objeto NumberFormat para el formato monetario
                         NumberFormat formatoMonetario = NumberFormat.getCurrencyInstance(new Locale("es", "AR"));
-                        
-                        
+
                         // Establece la cantidad máxima de dígitos decimales a mostrar
                         formatoMonetario.setMaximumFractionDigits(0);
 
@@ -192,12 +198,12 @@
                     <td class="text-capitalize"><%= ticket.getApellido()%></td>
                     <td class="text-lowercase"><%= ticket.getEmail()%></td>
                     <td><%= ticket.getCantidad()%></td>
-                    <td><%= precioFormateado %></td>
+                    <td><%= precioFormateado%></td>
                     <td><%= ticket.getCategoria()%></td>
                     <td><%= formattedDateTime%></td>
                     <td>
                         <div class="d-flex flex-row justify-content-center align-items-center gap-1">
-                        <a href="/ticket/<%= ticket.getCodigo() %>" class="btn btn-secondary"> <i class="fas fa-eye"></i> </a>
+                            <a href="/ticket/<%= ticket.getCodigo()%>" class="btn btn-secondary"> <i class="fas fa-eye"></i> </a>
                             <a href="/admin/ticket/editar/<%= ticket.getId()%>" class="btn btn-info text-white" title="Editar"><i class="fas fa-pen"></i></a>
                             <a href="/admin/ticket/eliminar/<%= ticket.getId()%>" class="btn btn-danger" title="Borrar"><i class="fas fa-trash"></i></a>
                         </div>
@@ -245,7 +251,6 @@
 
 
     <script src="../assets/js/validation.js"></script>
-    <script src="../assets/js/form.js"></script>
     <script src="../assets/js/icon-menu.js"></script>
     <script src="../assets/js/darkMode.js"></script>
     <script src="../assets/js/alert.js"></script>

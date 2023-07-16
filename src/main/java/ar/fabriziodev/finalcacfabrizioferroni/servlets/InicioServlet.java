@@ -1,6 +1,7 @@
 package ar.fabriziodev.finalcacfabrizioferroni.servlets;
 
 import ar.fabriziodev.finalcacfabrizioferroni.models.Orador;
+import ar.fabriziodev.finalcacfabrizioferroni.models.dto.OradorDto;
 import ar.fabriziodev.finalcacfabrizioferroni.repository.OradorRepository;
 import ar.fabriziodev.finalcacfabrizioferroni.services.OradorService;
 import jakarta.servlet.ServletException;
@@ -20,6 +21,7 @@ public class InicioServlet extends HttpServlet{
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String reqUri = req.getRequestURI().toString();
 
+
         if(reqUri != null){
             resp.sendRedirect("/");
         }else{
@@ -32,21 +34,30 @@ public class InicioServlet extends HttpServlet{
         String nombre = req.getParameter("nombre");
         String apellido = req.getParameter("apellido");
         String tema = req.getParameter("tema");
+        String descripcion = req.getParameter("descripcion");
 
-        if(nombre == "" || apellido == "" || tema == "" ){
+        if (nombre == "" || apellido == "" || tema == "" || descripcion == "") {
             req.setAttribute("status", "warning");
             req.setAttribute("msg", "Todos los campos son requeridos");
             req.setAttribute("nombre", nombre);
             req.setAttribute("apellido", apellido);
             req.setAttribute("tema", tema);
+            req.setAttribute("descripcion", descripcion);
             getServletContext().getRequestDispatcher("index.jsp").forward(req, resp);
         }
         String codigo = genCode(10);
 
         nombre = toNomProp(nombre);
         apellido = toNomProp(apellido);
+        tema = truncateText(tema);
 
-        Orador new_orador = new Orador(codigo, nombre, apellido, tema);
+        OradorDto new_orador = new OradorDto();
+
+        new_orador.setCodigo(codigo);
+        new_orador.setNombre(nombre);
+        new_orador.setApellido(apellido);
+        new_orador.setTema(tema);
+        new_orador.setDescripcion(descripcion);
 
         OradorRepository repo = new OradorService();
         HttpSession session = req.getSession();
@@ -60,6 +71,7 @@ public class InicioServlet extends HttpServlet{
                 session.setAttribute("apellido3", apellido);
                 session.setAttribute("tema2", tema);
                 session.setAttribute("codigo", codigo);
+                session.setAttribute("descripcion2", descripcion);
                 resp.sendRedirect("/#convertite-en-orador");
             }else{
                 session.setAttribute("status", "failed");
@@ -87,6 +99,14 @@ public class InicioServlet extends HttpServlet{
         }
 
         return randomString.toString();
+    }
+
+    public String truncateText(String text) {
+        if (text.length() > 85) {
+            return text.substring(0, 82) + "...";
+        } else {
+            return text;
+        }
     }
 
     public static String toNomProp(String element) {
